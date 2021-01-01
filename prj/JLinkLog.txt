@@ -1,0 +1,32 @@
+T1064 007:605 SEGGER J-Link V4.80g Log File (0003ms, 1026ms total)
+T1064 007:605 DLL Compiled: Feb 13 2014 20:50:02 (0003ms, 1026ms total)
+T1064 007:605 Logging started @ 2015-05-11 09:53 (0004ms, 1027ms total)
+T1064 007:609 JLINK_SetWarnOutHandler(...) (0000ms, 1027ms total)
+T1064 007:609 JLINK_OpenEx(...)
+Firmware: J-Link ARM V8 compiled Nov 25 2013 19:20:08
+Hardware: V8.00
+S/N: 20100214
+Feature(s): RDI,FlashDL,FlashBP,JFlash,GDBFull  returns O.K. (0286ms, 1313ms total)
+T1064 007:895 JLINK_SetErrorOutHandler(...) (0000ms, 1313ms total)
+T1064 007:897 JLINK_ExecCommand("ProjectFile = "E:\学习文件\专业学习\STM课程\STM课程作业\STM32\STMF030\模板\prj\JLinkSettings.ini"", ...)  returns 0x00 (0002ms, 1315ms total)
+T1064 007:899 JLINK_ExecCommand("Device = STM32F030F4", ...)Device "STM32F030F4" selected (16 KB flash, 4 KB RAM).  returns 0x00 (0001ms, 1316ms total)
+T1064 007:900 JLINK_ExecCommand("DisableConnectionTimeout", ...)  returns 0x01 (0000ms, 1316ms total)
+T1064 007:900 JLINK_GetHardwareVersion()  returns 0x13880 (0000ms, 1316ms total)
+T1064 007:900 JLINK_GetDLLVersion()  returns 48007 (0001ms, 1317ms total)
+T1064 007:901 JLINK_GetFirmwareString(...) (0000ms, 1317ms total)
+T1064 007:901 JLINK_GetDLLVersion()  returns 48007 (0000ms, 1317ms total)
+T1064 007:901 JLINK_GetCompileDateTime() (0000ms, 1317ms total)
+T1064 007:901 JLINK_GetFirmwareString(...) (0001ms, 1318ms total)
+T1064 007:902 JLINK_GetHardwareVersion()  returns 0x13880 (0000ms, 1318ms total)
+T1064 007:902 JLINK_TIF_Select(JLINKARM_TIF_SWD)  returns 0x00 (0012ms, 1330ms total)
+T1064 007:914 JLINK_SetSpeed(2000) (0001ms, 1331ms total)
+T1064 007:917 JLINK_SetResetType(JLINKARM_RESET_TYPE_NORMAL)  returns JLINKARM_RESET_TYPE_NORMAL (0001ms, 1333ms total)
+T1064 007:918 JLINK_Reset()
+  ***** Error: Supply voltage too low (1 Volt is required, Measured: 0.0 Volt).
+Please check target power.STM32F0xxx: Can not connect to CPU. Trying connect under reset.RESET (pin 15) high, but should be low. Please check target hardware.
+  ***** Error: STM32F0xxx: Connecting to CPU via connect under reset failed.JLINK_GetId()  returns 0x00000000 (0002ms, 1645ms total)
+T1064 008:230 JLINK_GetId()  returns 0x00000000 (0001ms, 1646ms total)
+T1064 008:235 JLINK_GetFirmwareString(...) (0001ms, 1647ms total)
+T0388 014:002 JLINK_Close() (0002ms, 1649ms total)
+T0388 014:002  (0003ms, 1650ms total)
+T0388 014:002 Closed (0003ms, 1650ms total)
