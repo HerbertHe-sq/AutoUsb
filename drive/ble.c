@@ -101,24 +101,24 @@ void USART_Deal(U8 flag)
 			{
 				switch(Usart_Rec_Buf[3])
 				{
-					case 0x01:
-						if(Usart_Rec_Buf[4]==0x01)	GPIO_ResetBits(GPIOA,GPIO_Pin_4);	
-						else GPIO_SetBits(GPIOA,GPIO_Pin_4);	
+					case BLE_FUNC_ITEM_LED1:
+						if(Usart_Rec_Buf[4]==0x01)	LED1_ON;
+						else LED1_OFF;
 					break;	
-					case 0x02:
-						if(Usart_Rec_Buf[4]==0x01)	GPIO_ResetBits(GPIOA,GPIO_Pin_5);	
-						else GPIO_SetBits(GPIOA,GPIO_Pin_5);	
+					case BLE_FUNC_ITEM_LED2:
+						if(Usart_Rec_Buf[4]==0x01)	LED2_ON;	
+						else LED2_OFF;	
 					
 					break;
-					case 0x03:
-						if(Usart_Rec_Buf[4]==0x01)	GPIO_ResetBits(GPIOA,GPIO_Pin_6);	
-						else GPIO_SetBits(GPIOA,GPIO_Pin_6);						
+					case BLE_FUNC_ITEM_LED3:
+            if(Usart_Rec_Buf[4]==0x01)	LED3_ON;	
+						else LED3_OFF;
 					break;
-					case 0x04:
-            if(Usart_Rec_Buf[4]==0x01)	GPIO_ResetBits(GPIOA,GPIO_Pin_7);	
-						else GPIO_SetBits(GPIOA,GPIO_Pin_7);
-					break;
-					case 0x08:
+					case BLE_FUNC_ITEM_BEEP:
+						if(Usart_Rec_Buf[4]==0x01)	BEEP_ON;	
+						else BEEP_OFF;						
+					break;					
+					case BLE_FUNC_ITEM_USB:
 							if(Usart_Rec_Buf[4]==0x00)usb_SwFg = 0x00;						
 							else                      usb_SwFg = 0x01;
 					    SetPowerSta(usb_SwFg);
@@ -130,21 +130,22 @@ void USART_Deal(U8 flag)
 			}
 			else if(Usart_Rec_Buf[6]==0xf7)
 			{
-				if(Usart_Rec_Buf[3]==0x06)//soft reset
+				if(Usart_Rec_Buf[3]==BLE_FUNC_ITEM_DRST)//soft reset
 				{
 					ST_Device_Reset();
 				}
-				else if(Usart_Rec_Buf[3]==0x07)
+				else if(Usart_Rec_Buf[3]==BLE_FUNC_ITEM_HEART)
 				{
 					if(Usart_Rec_Buf[4]==0x7f && Usart_Rec_Buf[5]==0x01)
 					{
 						heartCnt = 0;
 					}
 				}
+				else{;}
 			}
 			else if(Usart_Rec_Buf[12]==0xf7)
 			{
-				if(Usart_Rec_Buf[3]==0x05 && Usart_Rec_Buf[4]==0x40)// modify rtc time msg
+				if(Usart_Rec_Buf[3]==BLE_FUNC_ITEM_MODRTC && Usart_Rec_Buf[4]==0x40)// modify rtc time msg
 				{
 					//ÐÞ¸ÄÊ±¼ä
 					Modify_RtcTime(Usart_Rec_Buf);		
@@ -233,7 +234,7 @@ void ST_Device_Reset(void)
 // *****************************************************************************
 void Modify_RtcTime(U8 *buf)
 {
-	U8 send_buf[]={0xF0,0x5A ,0xA5 ,0x05 ,0x00 ,0x01 ,0xF7};
+	U8 send_buf[]={0xF0,0x5A ,0xA5 ,0x09 ,0x00 ,0x01 ,0xF7};
 	U16 year = buf[5]*256+buf[6]-2000;	
 	DS1302_SetTime((((year/10)<<4)|(year%10)),
 			(((buf[7]/10))<<4|(buf[7]%10)),
@@ -266,7 +267,7 @@ void Upload_RtcTime(void)
 		*p_tim++=0xf0;
 		*p_tim++=0x5A;
 		*p_tim++=0xA5;
-		*p_tim++=0x04;
+		*p_tim++=BLE_FUNC_ITEM_UPRTC;
 		*p_tim++=0x40;
 		
 		*p_tim++=((DS1302_time[DS_TIME_YEAR]+DS_YEAR_START)/256);//Year

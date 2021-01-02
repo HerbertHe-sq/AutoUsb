@@ -5,6 +5,8 @@
 #define LED1_ON         GPIO_ResetBits(GPIOA,GPIO_Pin_4)
 #define LED2_OFF        GPIO_SetBits(GPIOA,GPIO_Pin_5)	
 #define LED2_ON         GPIO_ResetBits(GPIOA,GPIO_Pin_5)
+#define LED3_OFF        GPIO_SetBits(GPIOA,GPIO_Pin_7)	
+#define LED3_ON         GPIO_ResetBits(GPIOA,GPIO_Pin_7)
 #define POWER_ON        GPIO_SetBits(GPIOA,GPIO_Pin_8)	
 #define POWER_OFF       GPIO_ResetBits(GPIOA,GPIO_Pin_8)	
 #define BEEP_ON         GPIO_SetBits(GPIOA,GPIO_Pin_6)
