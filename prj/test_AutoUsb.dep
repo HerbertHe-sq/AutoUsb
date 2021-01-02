@@ -1,7 +1,7 @@
 Dependencies for Project 'test', Target 'AutoUsb': (DO NOT MODIFY !)
 CompilerVersion: 5060960::V5.06 update 7 (build 960)::ARMCC
-F (..\user\main.c)(0x5FB7CAE4)(-c --cpu Cortex-M0 -D__MICROLIB -g -O0 --apcs=interwork -I ..\lib\inc -I ..\startup -I ..\user -I ..\lib\src -I ..\drive-IE:\StudySoftware\Keil_v5\ARM\RV31\INC-IE:\StudySoftware\Keil_v5\ARM\CMSIS\Include-IE:\StudySoftware\Keil_v5\ARM\INC\ST\STM32F0xx-D__UVISION_VERSION="532" -DUSE_STDPERIPH_DRIVER -DSTM32F0XX -DSTM32F030-o .\main.o --omf_browse .\main.crf --depend .\main.d)
-I (..\drive\includes.h)(0x5F8AEC8B)
+F (..\user\main.c)(0x5FF08023)(-c --cpu Cortex-M0 -D__MICROLIB -g -O0 --apcs=interwork -I ..\lib\inc -I ..\startup -I ..\user -I ..\lib\src -I ..\drive-IE:\StudySoftware\Keil_v5\ARM\RV31\INC-IE:\StudySoftware\Keil_v5\ARM\CMSIS\Include-IE:\StudySoftware\Keil_v5\ARM\INC\ST\STM32F0xx-D__UVISION_VERSION="532" -DUSE_STDPERIPH_DRIVER -DSTM32F0XX -DSTM32F030-o .\main.o --omf_browse .\main.crf --depend .\main.d)
+I (..\drive\includes.h)(0x5FF07C33)
 I (..\user\stm32f0xx.h)(0x4F6C6028)
 I (E:\StudySoftware\Keil_v5\ARM\CMSIS\Include\core_cm0.h)(0x5C8E53B0)
 I (E:\StudySoftware\Keil_v5\ARM\ARMCC\include\stdint.h)(0x5F63877C)
@@ -31,10 +31,10 @@ I (..\lib\inc\stm32f0xx_wwdg.h)(0x4F6C6028)
 I (..\lib\inc\stm32f0xx_misc.h)(0x4F6C6028)
 I (..\lib\inc\stm32f0xx_adc.h)(0x4F6C6028)
 I (..\drive\mydefine.h)(0x5CA0ABB5)
-I (..\drive\user.h)(0x5FF0274E)
+I (..\drive\user.h)(0x5FF085DF)
 I (..\drive\delay.h)(0x5C9758C6)
-I (..\drive\switch.h)(0x5FA40587)
-I (..\drive\ble.h)(0x5FF02C0B)
+I (..\drive\switch.h)(0x5FF07DC7)
+I (..\drive\ble.h)(0x5FF036D1)
 I (..\drive\eepiic.h)(0x5C97578C)
 I (..\drive\24cl02.h)(0x558A967C)
 I (..\drive\oled.h)(0x5F75E6FB)
@@ -74,13 +74,13 @@ I (..\lib\inc\stm32f0xx_tim.h)(0x4F6C6028)
 I (..\lib\inc\stm32f0xx_usart.h)(0x4F6C6028)
 I (..\lib\inc\stm32f0xx_wwdg.h)(0x4F6C6028)
 I (..\lib\inc\stm32f0xx_misc.h)(0x4F6C6028)
-I (..\drive\includes.h)(0x5F8AEC8B)
+I (..\drive\includes.h)(0x5FF07C33)
 I (..\lib\inc\stm32f0xx_adc.h)(0x4F6C6028)
 I (..\drive\mydefine.h)(0x5CA0ABB5)
-I (..\drive\user.h)(0x5FF0274E)
+I (..\drive\user.h)(0x5FF085DF)
 I (..\drive\delay.h)(0x5C9758C6)
-I (..\drive\switch.h)(0x5FA40587)
-I (..\drive\ble.h)(0x5FF02C0B)
+I (..\drive\switch.h)(0x5FF07DC7)
+I (..\drive\ble.h)(0x5FF036D1)
 I (..\drive\eepiic.h)(0x5C97578C)
 I (..\drive\24cl02.h)(0x558A967C)
 I (..\drive\oled.h)(0x5F75E6FB)
@@ -119,8 +119,8 @@ I (..\lib\inc\stm32f0xx_tim.h)(0x4F6C6028)
 I (..\lib\inc\stm32f0xx_usart.h)(0x4F6C6028)
 I (..\lib\inc\stm32f0xx_wwdg.h)(0x4F6C6028)
 I (..\lib\inc\stm32f0xx_misc.h)(0x4F6C6028)
-F (..\drive\user.c)(0x5FEF2827)(-c --cpu Cortex-M0 -D__MICROLIB -g -O0 --apcs=interwork -I ..\lib\inc -I ..\startup -I ..\user -I ..\lib\src -I ..\drive-IE:\StudySoftware\Keil_v5\ARM\RV31\INC-IE:\StudySoftware\Keil_v5\ARM\CMSIS\Include-IE:\StudySoftware\Keil_v5\ARM\INC\ST\STM32F0xx-D__UVISION_VERSION="532" -DUSE_STDPERIPH_DRIVER -DSTM32F0XX -DSTM32F030-o .\user.o --omf_browse .\user.crf --depend .\user.d)
-I (..\drive\includes.h)(0x5F8AEC8B)
+F (..\drive\user.c)(0x5FF08687)(-c --cpu Cortex-M0 -D__MICROLIB -g -O0 --apcs=interwork -I ..\lib\inc -I ..\startup -I ..\user -I ..\lib\src -I ..\drive-IE:\StudySoftware\Keil_v5\ARM\RV31\INC-IE:\StudySoftware\Keil_v5\ARM\CMSIS\Include-IE:\StudySoftware\Keil_v5\ARM\INC\ST\STM32F0xx-D__UVISION_VERSION="532" -DUSE_STDPERIPH_DRIVER -DSTM32F0XX -DSTM32F030-o .\user.o --omf_browse .\user.crf --depend .\user.d)
+I (..\drive\includes.h)(0x5FF07C33)
 I (..\user\stm32f0xx.h)(0x4F6C6028)
 I (E:\StudySoftware\Keil_v5\ARM\CMSIS\Include\core_cm0.h)(0x5C8E53B0)
 I (E:\StudySoftware\Keil_v5\ARM\ARMCC\include\stdint.h)(0x5F63877C)
@@ -150,10 +150,10 @@ I (..\lib\inc\stm32f0xx_wwdg.h)(0x4F6C6028)
 I (..\lib\inc\stm32f0xx_misc.h)(0x4F6C6028)
 I (..\lib\inc\stm32f0xx_adc.h)(0x4F6C6028)
 I (..\drive\mydefine.h)(0x5CA0ABB5)
-I (..\drive\user.h)(0x5FF0274E)
+I (..\drive\user.h)(0x5FF085DF)
 I (..\drive\delay.h)(0x5C9758C6)
-I (..\drive\switch.h)(0x5FA40587)
-I (..\drive\ble.h)(0x5FF02C0B)
+I (..\drive\switch.h)(0x5FF07DC7)
+I (..\drive\ble.h)(0x5FF036D1)
 I (..\drive\eepiic.h)(0x5C97578C)
 I (..\drive\24cl02.h)(0x558A967C)
 I (..\drive\oled.h)(0x5F75E6FB)
@@ -166,7 +166,7 @@ I (..\user\dev_func.h)(0x5FEF1BA1)
 I (..\user\ds18b20.h)(0x5F8AE3FD)
 I (..\drive\bmp.h)(0x5F7A7524)
 F (..\user\game.c)(0x5FEF330A)(-c --cpu Cortex-M0 -D__MICROLIB -g -O0 --apcs=interwork -I ..\lib\inc -I ..\startup -I ..\user -I ..\lib\src -I ..\drive-IE:\StudySoftware\Keil_v5\ARM\RV31\INC-IE:\StudySoftware\Keil_v5\ARM\CMSIS\Include-IE:\StudySoftware\Keil_v5\ARM\INC\ST\STM32F0xx-D__UVISION_VERSION="532" -DUSE_STDPERIPH_DRIVER -DSTM32F0XX -DSTM32F030-o .\game.o --omf_browse .\game.crf --depend .\game.d)
-I (..\drive\includes.h)(0x5F8AEC8B)
+I (..\drive\includes.h)(0x5FF07C33)
 I (..\user\stm32f0xx.h)(0x4F6C6028)
 I (E:\StudySoftware\Keil_v5\ARM\CMSIS\Include\core_cm0.h)(0x5C8E53B0)
 I (E:\StudySoftware\Keil_v5\ARM\ARMCC\include\stdint.h)(0x5F63877C)
@@ -196,10 +196,10 @@ I (..\lib\inc\stm32f0xx_wwdg.h)(0x4F6C6028)
 I (..\lib\inc\stm32f0xx_misc.h)(0x4F6C6028)
 I (..\lib\inc\stm32f0xx_adc.h)(0x4F6C6028)
 I (..\drive\mydefine.h)(0x5CA0ABB5)
-I (..\drive\user.h)(0x5FF0274E)
+I (..\drive\user.h)(0x5FF085DF)
 I (..\drive\delay.h)(0x5C9758C6)
-I (..\drive\switch.h)(0x5FA40587)
-I (..\drive\ble.h)(0x5FF02C0B)
+I (..\drive\switch.h)(0x5FF07DC7)
+I (..\drive\ble.h)(0x5FF036D1)
 I (..\drive\eepiic.h)(0x5C97578C)
 I (..\drive\24cl02.h)(0x558A967C)
 I (..\drive\oled.h)(0x5F75E6FB)
@@ -211,8 +211,8 @@ I (..\user\game.h)(0x5FEF3123)
 I (..\user\dev_func.h)(0x5FEF1BA1)
 I (..\user\ds18b20.h)(0x5F8AE3FD)
 I (..\user\map.h)(0x5F7997BB)
-F (..\user\dev_func.c)(0x5FB7CE2C)(-c --cpu Cortex-M0 -D__MICROLIB -g -O0 --apcs=interwork -I ..\lib\inc -I ..\startup -I ..\user -I ..\lib\src -I ..\drive-IE:\StudySoftware\Keil_v5\ARM\RV31\INC-IE:\StudySoftware\Keil_v5\ARM\CMSIS\Include-IE:\StudySoftware\Keil_v5\ARM\INC\ST\STM32F0xx-D__UVISION_VERSION="532" -DUSE_STDPERIPH_DRIVER -DSTM32F0XX -DSTM32F030-o .\dev_func.o --omf_browse .\dev_func.crf --depend .\dev_func.d)
-I (..\drive\includes.h)(0x5F8AEC8B)
+F (..\user\dev_func.c)(0x5FF07A49)(-c --cpu Cortex-M0 -D__MICROLIB -g -O0 --apcs=interwork -I ..\lib\inc -I ..\startup -I ..\user -I ..\lib\src -I ..\drive-IE:\StudySoftware\Keil_v5\ARM\RV31\INC-IE:\StudySoftware\Keil_v5\ARM\CMSIS\Include-IE:\StudySoftware\Keil_v5\ARM\INC\ST\STM32F0xx-D__UVISION_VERSION="532" -DUSE_STDPERIPH_DRIVER -DSTM32F0XX -DSTM32F030-o .\dev_func.o --omf_browse .\dev_func.crf --depend .\dev_func.d)
+I (..\drive\includes.h)(0x5FF07C33)
 I (..\user\stm32f0xx.h)(0x4F6C6028)
 I (E:\StudySoftware\Keil_v5\ARM\CMSIS\Include\core_cm0.h)(0x5C8E53B0)
 I (E:\StudySoftware\Keil_v5\ARM\ARMCC\include\stdint.h)(0x5F63877C)
@@ -242,10 +242,10 @@ I (..\lib\inc\stm32f0xx_wwdg.h)(0x4F6C6028)
 I (..\lib\inc\stm32f0xx_misc.h)(0x4F6C6028)
 I (..\lib\inc\stm32f0xx_adc.h)(0x4F6C6028)
 I (..\drive\mydefine.h)(0x5CA0ABB5)
-I (..\drive\user.h)(0x5FF0274E)
+I (..\drive\user.h)(0x5FF085DF)
 I (..\drive\delay.h)(0x5C9758C6)
-I (..\drive\switch.h)(0x5FA40587)
-I (..\drive\ble.h)(0x5FF02C0B)
+I (..\drive\switch.h)(0x5FF07DC7)
+I (..\drive\ble.h)(0x5FF036D1)
 I (..\drive\eepiic.h)(0x5C97578C)
 I (..\drive\24cl02.h)(0x558A967C)
 I (..\drive\oled.h)(0x5F75E6FB)
@@ -849,7 +849,7 @@ I (..\lib\inc\stm32f0xx_tim.h)(0x4F6C6028)
 I (..\lib\inc\stm32f0xx_usart.h)(0x4F6C6028)
 I (..\lib\inc\stm32f0xx_misc.h)(0x4F6C6028)
 F (..\drive\delay.c)(0x5C9758DD)(-c --cpu Cortex-M0 -D__MICROLIB -g -O0 --apcs=interwork -I ..\lib\inc -I ..\startup -I ..\user -I ..\lib\src -I ..\drive-IE:\StudySoftware\Keil_v5\ARM\RV31\INC-IE:\StudySoftware\Keil_v5\ARM\CMSIS\Include-IE:\StudySoftware\Keil_v5\ARM\INC\ST\STM32F0xx-D__UVISION_VERSION="532" -DUSE_STDPERIPH_DRIVER -DSTM32F0XX -DSTM32F030-o .\delay.o --omf_browse .\delay.crf --depend .\delay.d)
-I (..\drive\includes.h)(0x5F8AEC8B)
+I (..\drive\includes.h)(0x5FF07C33)
 I (..\user\stm32f0xx.h)(0x4F6C6028)
 I (E:\StudySoftware\Keil_v5\ARM\CMSIS\Include\core_cm0.h)(0x5C8E53B0)
 I (E:\StudySoftware\Keil_v5\ARM\ARMCC\include\stdint.h)(0x5F63877C)
@@ -879,10 +879,10 @@ I (..\lib\inc\stm32f0xx_wwdg.h)(0x4F6C6028)
 I (..\lib\inc\stm32f0xx_misc.h)(0x4F6C6028)
 I (..\lib\inc\stm32f0xx_adc.h)(0x4F6C6028)
 I (..\drive\mydefine.h)(0x5CA0ABB5)
-I (..\drive\user.h)(0x5FF0274E)
+I (..\drive\user.h)(0x5FF085DF)
 I (..\drive\delay.h)(0x5C9758C6)
-I (..\drive\switch.h)(0x5FA40587)
-I (..\drive\ble.h)(0x5FF02C0B)
+I (..\drive\switch.h)(0x5FF07DC7)
+I (..\drive\ble.h)(0x5FF036D1)
 I (..\drive\eepiic.h)(0x5C97578C)
 I (..\drive\24cl02.h)(0x558A967C)
 I (..\drive\oled.h)(0x5F75E6FB)
@@ -893,8 +893,8 @@ I (..\drive\itemp.h)(0x5F53921C)
 I (..\user\game.h)(0x5FEF3123)
 I (..\user\dev_func.h)(0x5FEF1BA1)
 I (..\user\ds18b20.h)(0x5F8AE3FD)
-F (..\drive\switch.c)(0x5FEF2236)(-c --cpu Cortex-M0 -D__MICROLIB -g -O0 --apcs=interwork -I ..\lib\inc -I ..\startup -I ..\user -I ..\lib\src -I ..\drive-IE:\StudySoftware\Keil_v5\ARM\RV31\INC-IE:\StudySoftware\Keil_v5\ARM\CMSIS\Include-IE:\StudySoftware\Keil_v5\ARM\INC\ST\STM32F0xx-D__UVISION_VERSION="532" -DUSE_STDPERIPH_DRIVER -DSTM32F0XX -DSTM32F030-o .\switch.o --omf_browse .\switch.crf --depend .\switch.d)
-I (..\drive\includes.h)(0x5F8AEC8B)
+F (..\drive\switch.c)(0x5FF08623)(-c --cpu Cortex-M0 -D__MICROLIB -g -O0 --apcs=interwork -I ..\lib\inc -I ..\startup -I ..\user -I ..\lib\src -I ..\drive-IE:\StudySoftware\Keil_v5\ARM\RV31\INC-IE:\StudySoftware\Keil_v5\ARM\CMSIS\Include-IE:\StudySoftware\Keil_v5\ARM\INC\ST\STM32F0xx-D__UVISION_VERSION="532" -DUSE_STDPERIPH_DRIVER -DSTM32F0XX -DSTM32F030-o .\switch.o --omf_browse .\switch.crf --depend .\switch.d)
+I (..\drive\includes.h)(0x5FF07C33)
 I (..\user\stm32f0xx.h)(0x4F6C6028)
 I (E:\StudySoftware\Keil_v5\ARM\CMSIS\Include\core_cm0.h)(0x5C8E53B0)
 I (E:\StudySoftware\Keil_v5\ARM\ARMCC\include\stdint.h)(0x5F63877C)
@@ -924,10 +924,10 @@ I (..\lib\inc\stm32f0xx_wwdg.h)(0x4F6C6028)
 I (..\lib\inc\stm32f0xx_misc.h)(0x4F6C6028)
 I (..\lib\inc\stm32f0xx_adc.h)(0x4F6C6028)
 I (..\drive\mydefine.h)(0x5CA0ABB5)
-I (..\drive\user.h)(0x5FF0274E)
+I (..\drive\user.h)(0x5FF085DF)
 I (..\drive\delay.h)(0x5C9758C6)
-I (..\drive\switch.h)(0x5FA40587)
-I (..\drive\ble.h)(0x5FF02C0B)
+I (..\drive\switch.h)(0x5FF07DC7)
+I (..\drive\ble.h)(0x5FF036D1)
 I (..\drive\eepiic.h)(0x5C97578C)
 I (..\drive\24cl02.h)(0x558A967C)
 I (..\drive\oled.h)(0x5F75E6FB)
@@ -938,8 +938,8 @@ I (..\drive\itemp.h)(0x5F53921C)
 I (..\user\game.h)(0x5FEF3123)
 I (..\user\dev_func.h)(0x5FEF1BA1)
 I (..\user\ds18b20.h)(0x5F8AE3FD)
-F (..\drive\ble.c)(0x5FF02C2B)(-c --cpu Cortex-M0 -D__MICROLIB -g -O0 --apcs=interwork -I ..\lib\inc -I ..\startup -I ..\user -I ..\lib\src -I ..\drive-IE:\StudySoftware\Keil_v5\ARM\RV31\INC-IE:\StudySoftware\Keil_v5\ARM\CMSIS\Include-IE:\StudySoftware\Keil_v5\ARM\INC\ST\STM32F0xx-D__UVISION_VERSION="532" -DUSE_STDPERIPH_DRIVER -DSTM32F0XX -DSTM32F030-o .\ble.o --omf_browse .\ble.crf --depend .\ble.d)
-I (..\drive\includes.h)(0x5F8AEC8B)
+F (..\drive\ble.c)(0x5FF07D22)(-c --cpu Cortex-M0 -D__MICROLIB -g -O0 --apcs=interwork -I ..\lib\inc -I ..\startup -I ..\user -I ..\lib\src -I ..\drive-IE:\StudySoftware\Keil_v5\ARM\RV31\INC-IE:\StudySoftware\Keil_v5\ARM\CMSIS\Include-IE:\StudySoftware\Keil_v5\ARM\INC\ST\STM32F0xx-D__UVISION_VERSION="532" -DUSE_STDPERIPH_DRIVER -DSTM32F0XX -DSTM32F030-o .\ble.o --omf_browse .\ble.crf --depend .\ble.d)
+I (..\drive\includes.h)(0x5FF07C33)
 I (..\user\stm32f0xx.h)(0x4F6C6028)
 I (E:\StudySoftware\Keil_v5\ARM\CMSIS\Include\core_cm0.h)(0x5C8E53B0)
 I (E:\StudySoftware\Keil_v5\ARM\ARMCC\include\stdint.h)(0x5F63877C)
@@ -969,10 +969,10 @@ I (..\lib\inc\stm32f0xx_wwdg.h)(0x4F6C6028)
 I (..\lib\inc\stm32f0xx_misc.h)(0x4F6C6028)
 I (..\lib\inc\stm32f0xx_adc.h)(0x4F6C6028)
 I (..\drive\mydefine.h)(0x5CA0ABB5)
-I (..\drive\user.h)(0x5FF0274E)
+I (..\drive\user.h)(0x5FF085DF)
 I (..\drive\delay.h)(0x5C9758C6)
-I (..\drive\switch.h)(0x5FA40587)
-I (..\drive\ble.h)(0x5FF02C0B)
+I (..\drive\switch.h)(0x5FF07DC7)
+I (..\drive\ble.h)(0x5FF036D1)
 I (..\drive\eepiic.h)(0x5C97578C)
 I (..\drive\24cl02.h)(0x558A967C)
 I (..\drive\oled.h)(0x5F75E6FB)
@@ -984,7 +984,7 @@ I (..\user\game.h)(0x5FEF3123)
 I (..\user\dev_func.h)(0x5FEF1BA1)
 I (..\user\ds18b20.h)(0x5F8AE3FD)
 F (..\drive\24cl02.c)(0x5C975992)(-c --cpu Cortex-M0 -D__MICROLIB -g -O0 --apcs=interwork -I ..\lib\inc -I ..\startup -I ..\user -I ..\lib\src -I ..\drive-IE:\StudySoftware\Keil_v5\ARM\RV31\INC-IE:\StudySoftware\Keil_v5\ARM\CMSIS\Include-IE:\StudySoftware\Keil_v5\ARM\INC\ST\STM32F0xx-D__UVISION_VERSION="532" -DUSE_STDPERIPH_DRIVER -DSTM32F0XX -DSTM32F030-o .\24cl02.o --omf_browse .\24cl02.crf --depend .\24cl02.d)
-I (..\drive\includes.h)(0x5F8AEC8B)
+I (..\drive\includes.h)(0x5FF07C33)
 I (..\user\stm32f0xx.h)(0x4F6C6028)
 I (E:\StudySoftware\Keil_v5\ARM\CMSIS\Include\core_cm0.h)(0x5C8E53B0)
 I (E:\StudySoftware\Keil_v5\ARM\ARMCC\include\stdint.h)(0x5F63877C)
@@ -1014,10 +1014,10 @@ I (..\lib\inc\stm32f0xx_wwdg.h)(0x4F6C6028)
 I (..\lib\inc\stm32f0xx_misc.h)(0x4F6C6028)
 I (..\lib\inc\stm32f0xx_adc.h)(0x4F6C6028)
 I (..\drive\mydefine.h)(0x5CA0ABB5)
-I (..\drive\user.h)(0x5FF0274E)
+I (..\drive\user.h)(0x5FF085DF)
 I (..\drive\delay.h)(0x5C9758C6)
-I (..\drive\switch.h)(0x5FA40587)
-I (..\drive\ble.h)(0x5FF02C0B)
+I (..\drive\switch.h)(0x5FF07DC7)
+I (..\drive\ble.h)(0x5FF036D1)
 I (..\drive\eepiic.h)(0x5C97578C)
 I (..\drive\24cl02.h)(0x558A967C)
 I (..\drive\oled.h)(0x5F75E6FB)
@@ -1029,7 +1029,7 @@ I (..\user\game.h)(0x5FEF3123)
 I (..\user\dev_func.h)(0x5FEF1BA1)
 I (..\user\ds18b20.h)(0x5F8AE3FD)
 F (..\drive\eepiic.c)(0x5CF368C4)(-c --cpu Cortex-M0 -D__MICROLIB -g -O0 --apcs=interwork -I ..\lib\inc -I ..\startup -I ..\user -I ..\lib\src -I ..\drive-IE:\StudySoftware\Keil_v5\ARM\RV31\INC-IE:\StudySoftware\Keil_v5\ARM\CMSIS\Include-IE:\StudySoftware\Keil_v5\ARM\INC\ST\STM32F0xx-D__UVISION_VERSION="532" -DUSE_STDPERIPH_DRIVER -DSTM32F0XX -DSTM32F030-o .\eepiic.o --omf_browse .\eepiic.crf --depend .\eepiic.d)
-I (..\drive\includes.h)(0x5F8AEC8B)
+I (..\drive\includes.h)(0x5FF07C33)
 I (..\user\stm32f0xx.h)(0x4F6C6028)
 I (E:\StudySoftware\Keil_v5\ARM\CMSIS\Include\core_cm0.h)(0x5C8E53B0)
 I (E:\StudySoftware\Keil_v5\ARM\ARMCC\include\stdint.h)(0x5F63877C)
@@ -1059,10 +1059,10 @@ I (..\lib\inc\stm32f0xx_wwdg.h)(0x4F6C6028)
 I (..\lib\inc\stm32f0xx_misc.h)(0x4F6C6028)
 I (..\lib\inc\stm32f0xx_adc.h)(0x4F6C6028)
 I (..\drive\mydefine.h)(0x5CA0ABB5)
-I (..\drive\user.h)(0x5FF0274E)
+I (..\drive\user.h)(0x5FF085DF)
 I (..\drive\delay.h)(0x5C9758C6)
-I (..\drive\switch.h)(0x5FA40587)
-I (..\drive\ble.h)(0x5FF02C0B)
+I (..\drive\switch.h)(0x5FF07DC7)
+I (..\drive\ble.h)(0x5FF036D1)
 I (..\drive\eepiic.h)(0x5C97578C)
 I (..\drive\24cl02.h)(0x558A967C)
 I (..\drive\oled.h)(0x5F75E6FB)
@@ -1074,7 +1074,7 @@ I (..\user\game.h)(0x5FEF3123)
 I (..\user\dev_func.h)(0x5FEF1BA1)
 I (..\user\ds18b20.h)(0x5F8AE3FD)
 F (..\drive\oled.c)(0x5F7996A2)(-c --cpu Cortex-M0 -D__MICROLIB -g -O0 --apcs=interwork -I ..\lib\inc -I ..\startup -I ..\user -I ..\lib\src -I ..\drive-IE:\StudySoftware\Keil_v5\ARM\RV31\INC-IE:\StudySoftware\Keil_v5\ARM\CMSIS\Include-IE:\StudySoftware\Keil_v5\ARM\INC\ST\STM32F0xx-D__UVISION_VERSION="532" -DUSE_STDPERIPH_DRIVER -DSTM32F0XX -DSTM32F030-o .\oled.o --omf_browse .\oled.crf --depend .\oled.d)
-I (..\drive\includes.h)(0x5F8AEC8B)
+I (..\drive\includes.h)(0x5FF07C33)
 I (..\user\stm32f0xx.h)(0x4F6C6028)
 I (E:\StudySoftware\Keil_v5\ARM\CMSIS\Include\core_cm0.h)(0x5C8E53B0)
 I (E:\StudySoftware\Keil_v5\ARM\ARMCC\include\stdint.h)(0x5F63877C)
@@ -1104,10 +1104,10 @@ I (..\lib\inc\stm32f0xx_wwdg.h)(0x4F6C6028)
 I (..\lib\inc\stm32f0xx_misc.h)(0x4F6C6028)
 I (..\lib\inc\stm32f0xx_adc.h)(0x4F6C6028)
 I (..\drive\mydefine.h)(0x5CA0ABB5)
-I (..\drive\user.h)(0x5FF0274E)
+I (..\drive\user.h)(0x5FF085DF)
 I (..\drive\delay.h)(0x5C9758C6)
-I (..\drive\switch.h)(0x5FA40587)
-I (..\drive\ble.h)(0x5FF02C0B)
+I (..\drive\switch.h)(0x5FF07DC7)
+I (..\drive\ble.h)(0x5FF036D1)
 I (..\drive\eepiic.h)(0x5C97578C)
 I (..\drive\24cl02.h)(0x558A967C)
 I (..\drive\oled.h)(0x5F75E6FB)
@@ -1120,7 +1120,7 @@ I (..\user\dev_func.h)(0x5FEF1BA1)
 I (..\user\ds18b20.h)(0x5F8AE3FD)
 I (..\drive\oledfont.h)(0x544D152F)
 F (..\drive\ds1302.c)(0x5F7841F4)(-c --cpu Cortex-M0 -D__MICROLIB -g -O0 --apcs=interwork -I ..\lib\inc -I ..\startup -I ..\user -I ..\lib\src -I ..\drive-IE:\StudySoftware\Keil_v5\ARM\RV31\INC-IE:\StudySoftware\Keil_v5\ARM\CMSIS\Include-IE:\StudySoftware\Keil_v5\ARM\INC\ST\STM32F0xx-D__UVISION_VERSION="532" -DUSE_STDPERIPH_DRIVER -DSTM32F0XX -DSTM32F030-o .\ds1302.o --omf_browse .\ds1302.crf --depend .\ds1302.d)
-I (..\drive\includes.h)(0x5F8AEC8B)
+I (..\drive\includes.h)(0x5FF07C33)
 I (..\user\stm32f0xx.h)(0x4F6C6028)
 I (E:\StudySoftware\Keil_v5\ARM\CMSIS\Include\core_cm0.h)(0x5C8E53B0)
 I (E:\StudySoftware\Keil_v5\ARM\ARMCC\include\stdint.h)(0x5F63877C)
@@ -1150,10 +1150,10 @@ I (..\lib\inc\stm32f0xx_wwdg.h)(0x4F6C6028)
 I (..\lib\inc\stm32f0xx_misc.h)(0x4F6C6028)
 I (..\lib\inc\stm32f0xx_adc.h)(0x4F6C6028)
 I (..\drive\mydefine.h)(0x5CA0ABB5)
-I (..\drive\user.h)(0x5FF0274E)
+I (..\drive\user.h)(0x5FF085DF)
 I (..\drive\delay.h)(0x5C9758C6)
-I (..\drive\switch.h)(0x5FA40587)
-I (..\drive\ble.h)(0x5FF02C0B)
+I (..\drive\switch.h)(0x5FF07DC7)
+I (..\drive\ble.h)(0x5FF036D1)
 I (..\drive\eepiic.h)(0x5C97578C)
 I (..\drive\24cl02.h)(0x558A967C)
 I (..\drive\oled.h)(0x5F75E6FB)
@@ -1165,7 +1165,7 @@ I (..\user\game.h)(0x5FEF3123)
 I (..\user\dev_func.h)(0x5FEF1BA1)
 I (..\user\ds18b20.h)(0x5F8AE3FD)
 F (..\drive\flash.c)(0x5EA54E1E)(-c --cpu Cortex-M0 -D__MICROLIB -g -O0 --apcs=interwork -I ..\lib\inc -I ..\startup -I ..\user -I ..\lib\src -I ..\drive-IE:\StudySoftware\Keil_v5\ARM\RV31\INC-IE:\StudySoftware\Keil_v5\ARM\CMSIS\Include-IE:\StudySoftware\Keil_v5\ARM\INC\ST\STM32F0xx-D__UVISION_VERSION="532" -DUSE_STDPERIPH_DRIVER -DSTM32F0XX -DSTM32F030-o .\flash.o --omf_browse .\flash.crf --depend .\flash.d)
-I (..\drive\includes.h)(0x5F8AEC8B)
+I (..\drive\includes.h)(0x5FF07C33)
 I (..\user\stm32f0xx.h)(0x4F6C6028)
 I (E:\StudySoftware\Keil_v5\ARM\CMSIS\Include\core_cm0.h)(0x5C8E53B0)
 I (E:\StudySoftware\Keil_v5\ARM\ARMCC\include\stdint.h)(0x5F63877C)
@@ -1195,10 +1195,10 @@ I (..\lib\inc\stm32f0xx_wwdg.h)(0x4F6C6028)
 I (..\lib\inc\stm32f0xx_misc.h)(0x4F6C6028)
 I (..\lib\inc\stm32f0xx_adc.h)(0x4F6C6028)
 I (..\drive\mydefine.h)(0x5CA0ABB5)
-I (..\drive\user.h)(0x5FF0274E)
+I (..\drive\user.h)(0x5FF085DF)
 I (..\drive\delay.h)(0x5C9758C6)
-I (..\drive\switch.h)(0x5FA40587)
-I (..\drive\ble.h)(0x5FF02C0B)
+I (..\drive\switch.h)(0x5FF07DC7)
+I (..\drive\ble.h)(0x5FF036D1)
 I (..\drive\eepiic.h)(0x5C97578C)
 I (..\drive\24cl02.h)(0x558A967C)
 I (..\drive\oled.h)(0x5F75E6FB)
@@ -1210,7 +1210,7 @@ I (..\user\game.h)(0x5FEF3123)
 I (..\user\dev_func.h)(0x5FEF1BA1)
 I (..\user\ds18b20.h)(0x5F8AE3FD)
 F (..\drive\itemp.c)(0x5F7B23B5)(-c --cpu Cortex-M0 -D__MICROLIB -g -O0 --apcs=interwork -I ..\lib\inc -I ..\startup -I ..\user -I ..\lib\src -I ..\drive-IE:\StudySoftware\Keil_v5\ARM\RV31\INC-IE:\StudySoftware\Keil_v5\ARM\CMSIS\Include-IE:\StudySoftware\Keil_v5\ARM\INC\ST\STM32F0xx-D__UVISION_VERSION="532" -DUSE_STDPERIPH_DRIVER -DSTM32F0XX -DSTM32F030-o .\itemp.o --omf_browse .\itemp.crf --depend .\itemp.d)
-I (..\drive\includes.h)(0x5F8AEC8B)
+I (..\drive\includes.h)(0x5FF07C33)
 I (..\user\stm32f0xx.h)(0x4F6C6028)
 I (E:\StudySoftware\Keil_v5\ARM\CMSIS\Include\core_cm0.h)(0x5C8E53B0)
 I (E:\StudySoftware\Keil_v5\ARM\ARMCC\include\stdint.h)(0x5F63877C)
@@ -1240,10 +1240,10 @@ I (..\lib\inc\stm32f0xx_wwdg.h)(0x4F6C6028)
 I (..\lib\inc\stm32f0xx_misc.h)(0x4F6C6028)
 I (..\lib\inc\stm32f0xx_adc.h)(0x4F6C6028)
 I (..\drive\mydefine.h)(0x5CA0ABB5)
-I (..\drive\user.h)(0x5FF0274E)
+I (..\drive\user.h)(0x5FF085DF)
 I (..\drive\delay.h)(0x5C9758C6)
-I (..\drive\switch.h)(0x5FA40587)
-I (..\drive\ble.h)(0x5FF02C0B)
+I (..\drive\switch.h)(0x5FF07DC7)
+I (..\drive\ble.h)(0x5FF036D1)
 I (..\drive\eepiic.h)(0x5C97578C)
 I (..\drive\24cl02.h)(0x558A967C)
 I (..\drive\oled.h)(0x5F75E6FB)
@@ -1255,7 +1255,7 @@ I (..\user\game.h)(0x5FEF3123)
 I (..\user\dev_func.h)(0x5FEF1BA1)
 I (..\user\ds18b20.h)(0x5F8AE3FD)
 F (..\user\ds18b20.c)(0x5F8AF5F7)(-c --cpu Cortex-M0 -D__MICROLIB -g -O0 --apcs=interwork -I ..\lib\inc -I ..\startup -I ..\user -I ..\lib\src -I ..\drive-IE:\StudySoftware\Keil_v5\ARM\RV31\INC-IE:\StudySoftware\Keil_v5\ARM\CMSIS\Include-IE:\StudySoftware\Keil_v5\ARM\INC\ST\STM32F0xx-D__UVISION_VERSION="532" -DUSE_STDPERIPH_DRIVER -DSTM32F0XX -DSTM32F030-o .\ds18b20.o --omf_browse .\ds18b20.crf --depend .\ds18b20.d)
-I (..\drive\includes.h)(0x5F8AEC8B)
+I (..\drive\includes.h)(0x5FF07C33)
 I (..\user\stm32f0xx.h)(0x4F6C6028)
 I (E:\StudySoftware\Keil_v5\ARM\CMSIS\Include\core_cm0.h)(0x5C8E53B0)
 I (E:\StudySoftware\Keil_v5\ARM\ARMCC\include\stdint.h)(0x5F63877C)
@@ -1285,10 +1285,10 @@ I (..\lib\inc\stm32f0xx_wwdg.h)(0x4F6C6028)
 I (..\lib\inc\stm32f0xx_misc.h)(0x4F6C6028)
 I (..\lib\inc\stm32f0xx_adc.h)(0x4F6C6028)
 I (..\drive\mydefine.h)(0x5CA0ABB5)
-I (..\drive\user.h)(0x5FF0274E)
+I (..\drive\user.h)(0x5FF085DF)
 I (..\drive\delay.h)(0x5C9758C6)
-I (..\drive\switch.h)(0x5FA40587)
-I (..\drive\ble.h)(0x5FF02C0B)
+I (..\drive\switch.h)(0x5FF07DC7)
+I (..\drive\ble.h)(0x5FF036D1)
 I (..\drive\eepiic.h)(0x5C97578C)
 I (..\drive\24cl02.h)(0x558A967C)
 I (..\drive\oled.h)(0x5F75E6FB)

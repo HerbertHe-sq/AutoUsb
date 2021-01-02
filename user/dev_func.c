@@ -3,8 +3,9 @@
 
 //外部变量：
 extern SYSTEMSTRUCT SysParam;
+extern SYSTEM_CTRL_FLAG sysCtrlFlag;
 extern U8 staBar[],dailyStr[],timeStr[];
-extern U8 tx_cnt,rx_cnt,sLedFlag;
+extern U8 tx_cnt,rx_cnt;
 
 // *****************************************************************************
 // 函数名称：BT_Usart_Rec
@@ -96,9 +97,9 @@ void OLED_Print(U8 *tip_str)
 // *****************************************************************************
 void Signal_LED(void)
 {
-	if(!sLedFlag)
+	if(!sysCtrlFlag.sLedFlag)
 	{
-		sLedFlag = 255;
+		sysCtrlFlag.sLedFlag = 255;
 		if(tx_cnt%2==1)LED1_ON;
 		else LED1_OFF;
 		

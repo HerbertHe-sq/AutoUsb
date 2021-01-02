@@ -1,12 +1,10 @@
 #include "includes.h"
 
 //内部变量
-U8 swFlag = 0,beepFlag = 0,upTimeFg = 0,sLedFlag = 1;//蜂鸣器标志位    //更新时间标志位
-U16 pwFlag = 0,timSFlag,timLedFlag=10,adcFlag = 0;
 SYSTEMSTRUCT SysParam;
+SYSTEM_CTRL_FLAG sysCtrlFlag={0,0,0,1,1,0,0,0,10,0};
 
 //外部变量
-extern U8 usb_SwFg;
 
 // *****************************************************************************
 // 函数名称：Sysclk_Interrupt
@@ -17,14 +15,14 @@ extern U8 usb_SwFg;
 // *****************************************************************************
 void Sysclk_Interrupt(void)
 {  
-  if(swFlag)swFlag--;
-	if(timSFlag)timSFlag--;
-	if(beepFlag)beepFlag--;
-	if(upTimeFg)upTimeFg--;
-	if(timLedFlag)timLedFlag--;
-	if(adcFlag)adcFlag--;
-	if(sLedFlag)sLedFlag--;
-	pwFlag++;
+  if(sysCtrlFlag.swFlag)sysCtrlFlag.swFlag--;
+	if(sysCtrlFlag.timSFlag)sysCtrlFlag.timSFlag--;
+	if(sysCtrlFlag.beepFlag)sysCtrlFlag.beepFlag--;
+	if(sysCtrlFlag.upTimeFg)sysCtrlFlag.upTimeFg--;
+	if(sysCtrlFlag.timLedFlag)sysCtrlFlag.timLedFlag--;
+	if(sysCtrlFlag.adcFlag)sysCtrlFlag.adcFlag--;
+	if(sysCtrlFlag.sLedFlag)sysCtrlFlag.sLedFlag--;
+	sysCtrlFlag.pwFlag++;
 }
 
 // *****************************************************************************
@@ -90,8 +88,8 @@ void UserInit(void)
 	ArrayCopy(temp,SysParam.SysALMTime,8,0);
 	
 	//读取继电器标志位
-	usb_SwFg = AT24C02_ReadOneByte(SW_EEPADDR);
-	SetPowerSta(usb_SwFg);
+	sysCtrlFlag.usb_SwFg = AT24C02_ReadOneByte(SW_EEPADDR);
+	SetPowerSta(sysCtrlFlag.usb_SwFg);
 	
 	//读取游戏速度
 	Game_SetSpeed(AT24C02_ReadOneByte(SNAKE_SPEED));

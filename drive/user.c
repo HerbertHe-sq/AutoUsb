@@ -8,9 +8,9 @@ U8 staBar[] = "R:00 M:G    B:LE";//red_w_Code[3];
 short dsbDat = 0;
 
 //外部变量
-extern U16 pwFlag,timLedFlag,adcFlag;
-extern U8 beepFlag,tim_SetCnt,upTimeFg,heartCnt,timSFlag,rx_cnt;
+extern U8 heartCnt,rx_cnt;
 extern SYSTEMSTRUCT SysParam;
+extern SYSTEM_CTRL_FLAG sysCtrlFlag;
 extern SNAKE_PARAM  Snake_Param;
 extern U8 DS1302_time[],SetTime[],AlmTime[];
 
@@ -78,6 +78,54 @@ void GPIO_LED3_Config(void)
 	GPIO_InitTypeDef GPIO_InitStruct;
 	GPIO_InitStruct.GPIO_Pin = GPIO_Pin_7;
   GPIO_InitStruct.GPIO_Mode = GPIO_Mode_AF;
+  GPIO_InitStruct.GPIO_OType = GPIO_OType_PP;
+  GPIO_InitStruct.GPIO_Speed =GPIO_Speed_Level_3;
+  GPIO_Init(GPIOA, &GPIO_InitStruct);
+}
+
+// *****************************************************************************
+// 函数名称：GPIO_LED_Enable
+// 功能描述：GPIO LED 使能
+// 输入参数: /
+// 输出参数: /
+// 返回参量: /
+// *****************************************************************************
+void GPIO_LED_Enable(void)
+{
+	GPIO_InitTypeDef GPIO_InitStruct;
+	
+  GPIO_InitStruct.GPIO_Pin = GPIO_Pin_4|GPIO_Pin_5;
+  GPIO_InitStruct.GPIO_Mode = GPIO_Mode_OUT;
+  GPIO_InitStruct.GPIO_OType = GPIO_OType_PP;
+  GPIO_InitStruct.GPIO_Speed =GPIO_Speed_Level_3;
+  GPIO_Init(GPIOA, &GPIO_InitStruct); 
+
+	GPIO_InitStruct.GPIO_Pin = GPIO_Pin_7;
+  GPIO_InitStruct.GPIO_Mode = GPIO_Mode_AF;
+  GPIO_InitStruct.GPIO_OType = GPIO_OType_PP;
+  GPIO_InitStruct.GPIO_Speed =GPIO_Speed_Level_3;
+  GPIO_Init(GPIOA, &GPIO_InitStruct);	
+}
+
+// *****************************************************************************
+// 函数名称：GPIO_LED_Disable
+// 功能描述：GPIO LED 失能
+// 输入参数: /
+// 输出参数: /
+// 返回参量: /
+// *****************************************************************************
+void GPIO_LED_Disable(void)
+{
+	GPIO_InitTypeDef GPIO_InitStruct;
+	
+  GPIO_InitStruct.GPIO_Pin = GPIO_Pin_4|GPIO_Pin_5;
+  GPIO_InitStruct.GPIO_Mode = GPIO_Mode_IN;
+  GPIO_InitStruct.GPIO_OType = GPIO_OType_PP;
+  GPIO_InitStruct.GPIO_Speed =GPIO_Speed_Level_3;
+  GPIO_Init(GPIOA, &GPIO_InitStruct); 
+
+	GPIO_InitStruct.GPIO_Pin = GPIO_Pin_7;
+  GPIO_InitStruct.GPIO_Mode = GPIO_Mode_IN;
   GPIO_InitStruct.GPIO_OType = GPIO_OType_PP;
   GPIO_InitStruct.GPIO_Speed =GPIO_Speed_Level_3;
   GPIO_Init(GPIOA, &GPIO_InitStruct);
@@ -277,23 +325,23 @@ void Device_Scan(void)
 	if(key_flag)USART_Deal(key_flag);
 	
 	//ADC Convert
-	if(!adcFlag)
+	if(!sysCtrlFlag.adcFlag)
 	{
-		adcFlag = 2000;
+		sysCtrlFlag.adcFlag = 2000;
 		DMA_Interrupt();	
     dsbDat = DSB_GetTemp();		
 	}
 	
 	//Get Time
-	if(!upTimeFg)
+	if(!sysCtrlFlag.upTimeFg)
 	{
-		upTimeFg = 100;
+		sysCtrlFlag.upTimeFg = 100;
 	  DS1302_GetTime();	
 		ALM_Proc();
 	}
 	
 	//Beep
-	if(beepFlag)BEEP_ON;
+	if(sysCtrlFlag.beepFlag)BEEP_ON;
 	else BEEP_OFF;
 	
 	//Signal LED
@@ -354,9 +402,9 @@ void OLED_Display(void)
 	static float cpu_temp,cpu_vol;
 	static U8 cnt = 0,pw_cnt = 0;
 	static U16 pulse = 0,direct_cnt = 0;
-	if(pwFlag<=25000)
+	if(sysCtrlFlag.pwFlag<=25000)
 	{
-		if(pwFlag>(pw_cnt*5000) && pwFlag<((pw_cnt*5000)+200))
+		if(sysCtrlFlag.pwFlag>(pw_cnt*5000) && sysCtrlFlag.pwFlag<((pw_cnt*5000)+200))
 		{
 			for(pw_i=0;pw_i<4;pw_i++)
 			{
@@ -381,11 +429,11 @@ void OLED_Display(void)
 			OLED_DrawBMP(0,0,128,2,Power_BMP);
 		}
   }
-  else pwFlag = 0;
+  else sysCtrlFlag.pwFlag = 0;
 	
-	if(!timSFlag)
+	if(!sysCtrlFlag.timSFlag)
 	{
-		timSFlag = 250;
+		sysCtrlFlag.timSFlag = 250;
 
 		if(SysParam.SysMode == MODE_NORMALLY)//一般模式显示
 		{		
@@ -467,12 +515,12 @@ void OLED_Display(void)
 			}
 			else
 			{
-				if(tim_SetCnt==TIME_SET_ID_HOUR)      timeStr[5] = '_';				
-				else if(tim_SetCnt==TIME_SET_ID_MIN) timeStr[8] = '_';				
-				else if(tim_SetCnt==TIME_SET_ID_SEC) timeStr[11] = '_';				
-				else if(tim_SetCnt==TIME_SET_ID_YEAR) dailyStr[6] = '_';				
-				else if(tim_SetCnt==TIME_SET_ID_MON) dailyStr[9] = '_';
-				else if(tim_SetCnt==TIME_SET_ID_DAY) dailyStr[12] = '_';				
+				if(sysCtrlFlag.tim_SetCnt==TIME_SET_ID_HOUR)      timeStr[5] = '_';				
+				else if(sysCtrlFlag.tim_SetCnt==TIME_SET_ID_MIN) timeStr[8] = '_';				
+				else if(sysCtrlFlag.tim_SetCnt==TIME_SET_ID_SEC) timeStr[11] = '_';				
+				else if(sysCtrlFlag.tim_SetCnt==TIME_SET_ID_YEAR) dailyStr[6] = '_';				
+				else if(sysCtrlFlag.tim_SetCnt==TIME_SET_ID_MON) dailyStr[9] = '_';
+				else if(sysCtrlFlag.tim_SetCnt==TIME_SET_ID_DAY) dailyStr[12] = '_';				
 				else{;}				
 			}
 			
@@ -511,12 +559,12 @@ void OLED_Display(void)
 			}
 			else
 			{			
-					if(tim_SetCnt==TIME_SET_ID_HOUR)      timeStr[5] = '_';					
-					else if(tim_SetCnt==TIME_SET_ID_MIN) timeStr[8] = '_';				
-					else if(tim_SetCnt==TIME_SET_ID_SEC) timeStr[11] = '_';					
-					else if(tim_SetCnt==TIME_SET_ID_YEAR) dailyStr[6] = '_';					
-					else if(tim_SetCnt==TIME_SET_ID_MON) dailyStr[9] = '_';					
-					else if(tim_SetCnt==TIME_SET_ID_DAY) dailyStr[12] = '_';					
+					if(sysCtrlFlag.tim_SetCnt==TIME_SET_ID_HOUR)      timeStr[5] = '_';					
+					else if(sysCtrlFlag.tim_SetCnt==TIME_SET_ID_MIN) timeStr[8] = '_';				
+					else if(sysCtrlFlag.tim_SetCnt==TIME_SET_ID_SEC) timeStr[11] = '_';					
+					else if(sysCtrlFlag.tim_SetCnt==TIME_SET_ID_YEAR) dailyStr[6] = '_';					
+					else if(sysCtrlFlag.tim_SetCnt==TIME_SET_ID_MON) dailyStr[9] = '_';					
+					else if(sysCtrlFlag.tim_SetCnt==TIME_SET_ID_DAY) dailyStr[12] = '_';					
 					else{;}	
 			}
 			
@@ -657,9 +705,9 @@ void OLED_Display(void)
 			sup_fg = 0;				
 		}
 	}
-	if(!timLedFlag)
+	if(!sysCtrlFlag.timLedFlag)
 	{
-		timLedFlag = 10;
+		sysCtrlFlag.timLedFlag = 10;
 		//PWM
     if(direct_cnt==0)	
 		{

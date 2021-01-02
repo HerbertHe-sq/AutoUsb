@@ -17,6 +17,8 @@
 void RCC_Configuration(void);
 void GPIO_Configuration(void);
 void GPIO_LED3_Config(void);
+void GPIO_LED_Enable(void);
+void GPIO_LED_Disable(void);
 void SysTick05ms(void);
 void EXIT_Config(void);
 void TIM_Config(void);

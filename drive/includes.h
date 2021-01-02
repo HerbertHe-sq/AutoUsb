@@ -54,6 +54,19 @@ typedef struct{
 
 }SYSTEMSTRUCT;
 
+typedef struct{
+	U8 swFlag;      //开关
+	U8 beepFlag;    //蜂鸣器
+	U8 upTimeFg;    //更新时间标志位
+	U8 sLedFlag;    //蜂鸣器标志位  
+  U8 tim_SetCnt;  //选择设置标志位
+  U8 usb_SwFg;	  //USB开关标志位
+  U16 pwFlag;     //电量进度条
+	U16 timSFlag;   //刷屏时间
+	U16 timLedFlag; //呼吸灯
+	U16 adcFlag;    //ADC转换标志位
+}SYSTEM_CTRL_FLAG;
+
 
 #endif
 

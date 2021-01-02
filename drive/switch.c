@@ -6,13 +6,14 @@ U8 SW_BTScanDat[SW_SEL_LINE]; //存储扫描数据
 U8 BtnState[SW_SUM];          //按键状态表
 U8 SW_Sel_Table[SW_SEL_LINE] = {0x0E,0x0D,0x0B};//选线表
 U8 SetTime[8],AlmTime[8];
-U8 mode_Fg = 1,sel_Fg = 0,tim_SetCnt = 1,usb_SwFg = 0;//模式标志位
 U8 dis_cnt = 0;//关闭屏幕
 const U8 mon_table[12]={31,28,31,30,31,30,31,31,30,31,30,31};	       //12个月份的天数
 
+SEITCH_FLAG sw_flag={1,0};
+
 
 //外部变量
-extern U8 swFlag,beepFlag;
+extern SYSTEM_CTRL_FLAG sysCtrlFlag;
 extern SYSTEMSTRUCT SysParam;
 extern U8 staBar[],dailyStr[],timeStr[];
 extern U8 DS1302_time[];
@@ -22,7 +23,7 @@ extern U8 DS1302_time[];
 *	功能说明: 延时
 *	形    参: 无
 *	返 回 值: 无
-*   备    注: 无
+* 备    注: 无
 ********************************************************************************************************* */
 void SW_Delay(U8 de_Count)	 
 {  
@@ -44,9 +45,9 @@ U8 Switch_Scan(void)
 	
 	static U8 s1_CountBT[SW_SEL_LINE];	           
 	static U16 s1_PreBT[SW_SEL_LINE];
-	if(!swFlag)
+	if(!sysCtrlFlag.swFlag)
 	{
-		swFlag = 2;//相隔1ms扫描一次
+		sysCtrlFlag.swFlag = 2;//相隔1ms扫描一次
 		for(sl_i = 0;sl_i<SW_SEL_LINE;sl_i++)
 		{
 			//选线
@@ -131,16 +132,16 @@ void Key_Process(U8 key_id)
 {
 	if(BtnState[key_id]!=0)
 	{
-		beepFlag = 100;
+		sysCtrlFlag.beepFlag = 100;
 		
 		switch(key_id)
 		{
-      case 0:Key_LeftEvt(); break;
-			case 1:Key_UpEvt(); break;
-			case 2:Key_EnterEvt();break;
-			case 3:Key_RightEvt();break;
-			case 4:Key_DownEvt(); break;
-			case 5:Key_CacelEvt();break;	
+      case KEY_FUNC_LEFT:Key_LeftEvt(); break;
+			case KEY_FUNC_UP:Key_UpEvt(); break;
+			case KEY_FUNC_ENTER:Key_EnterEvt();break;
+			case KEY_FUNC_RIGHT:Key_RightEvt();break;
+			case KEY_FUNC_DOWN:Key_DownEvt(); break;
+			case KEY_FUNC_CANCEL:Key_CacelEvt();break;	
 			default:break;			
 		}		
 	}
@@ -157,11 +158,11 @@ void Key_Process(U8 key_id)
 void Key_DownEvt(void)
 {
 	//U8 i = 0;
-	if(sel_Fg==1)
+	if(sw_flag.sel_Fg==1)
 	{
-		mode_Fg--;
-		if(mode_Fg<MODE_ID_GEN)mode_Fg = MODE_ID_BTAD;
-		switch(mode_Fg)
+		sw_flag.mode_Fg--;
+		if(sw_flag.mode_Fg<MODE_ID_GEN)sw_flag.mode_Fg = MODE_ID_BTAD;
+		switch(sw_flag.mode_Fg)
 		{
 			case MODE_ID_GEN:
 				staBar[7] = 'G';
@@ -229,7 +230,7 @@ void Key_DownEvt(void)
 	{
 		if(SysParam.SysMode == MODE_TIMESET)
 		{
-			switch(tim_SetCnt)
+			switch(sysCtrlFlag.tim_SetCnt)
 			{
 				case TIME_SET_ID_HOUR:
 					SetTime[DS_TIME_HOUR]++;
@@ -260,7 +261,7 @@ void Key_DownEvt(void)
 		}
 		else if(SysParam.SysMode == MODE_ALARM)
 		{
-			switch(tim_SetCnt)
+			switch(sysCtrlFlag.tim_SetCnt)
 			{
 				case TIME_SET_ID_HOUR:
 					AlmTime[DS_TIME_HOUR]++;
@@ -309,11 +310,11 @@ void Key_DownEvt(void)
 // *****************************************************************************
 void Key_UpEvt(void)
 {
-	if(sel_Fg==1)
+	if(sw_flag.sel_Fg==1)
 	{
-		mode_Fg++;
-		if(mode_Fg>MODE_ID_BTAD)mode_Fg = MODE_ID_GEN;
-		switch(mode_Fg)
+		sw_flag.mode_Fg++;
+		if(sw_flag.mode_Fg>MODE_ID_BTAD)sw_flag.mode_Fg = MODE_ID_GEN;
+		switch(sw_flag.mode_Fg)
 		{
 			case MODE_ID_GEN:
 				staBar[7] = 'G';
@@ -381,7 +382,7 @@ void Key_UpEvt(void)
 	{
 		if(SysParam.SysMode == MODE_TIMESET)
 		{
-			switch(tim_SetCnt)
+			switch(sysCtrlFlag.tim_SetCnt)
 			{
 				case TIME_SET_ID_HOUR:
 					SetTime[DS_TIME_HOUR]--;
@@ -411,7 +412,7 @@ void Key_UpEvt(void)
 		}	
 		else if(SysParam.SysMode == MODE_ALARM)
 		{
-			switch(tim_SetCnt)
+			switch(sysCtrlFlag.tim_SetCnt)
 			{
 				case TIME_SET_ID_HOUR:
 					AlmTime[TIME_SET_ID_HOUR]--;
@@ -459,16 +460,16 @@ void Key_UpEvt(void)
 // *****************************************************************************
 void Key_LeftEvt(void)
 {
-	if(sel_Fg!=1)
+	if(sw_flag.sel_Fg!=1)
 	{
-		tim_SetCnt--;
-		if(tim_SetCnt<TIME_SET_ID_HOUR)tim_SetCnt = TIME_SET_ID_DAY;		
+		sysCtrlFlag.tim_SetCnt--;
+		if(sysCtrlFlag.tim_SetCnt<TIME_SET_ID_HOUR)sysCtrlFlag.tim_SetCnt = TIME_SET_ID_DAY;		
 	}
 	if(SysParam.SysMode==MODE_NORMALLY||SysParam.SysMode==MODE_CPU_DATA)
 	{
-		usb_SwFg++;
-		SetPowerSta(usb_SwFg);
-		AT24C02_WriteOneByte(SW_EEPADDR,usb_SwFg%2==0?0x00:0x01);
+		sysCtrlFlag.usb_SwFg++;
+		SetPowerSta(sysCtrlFlag.usb_SwFg);
+		AT24C02_WriteOneByte(SW_EEPADDR,sysCtrlFlag.usb_SwFg%2==0?0x00:0x01);
 	}
 	else if(SysParam.SysMode == MODE_GAME)
 	{
@@ -486,11 +487,11 @@ void Key_LeftEvt(void)
 // *****************************************************************************
 void Key_RightEvt(void)
 {
-	if(sel_Fg==1)
+	if(sw_flag.sel_Fg==1)
 	{
-	  SysParam.SysMode = mode_Fg-1;
-		sel_Fg = 0;
-		tim_SetCnt = TIME_SET_ID_HOUR;
+	  SysParam.SysMode = sw_flag.mode_Fg-1;
+		sw_flag.sel_Fg = 0;
+		sysCtrlFlag.tim_SetCnt = TIME_SET_ID_HOUR;
 		if(SysParam.SysMode==MODE_TIMESET)
 		{
 		  ArrayCopy(DS1302_time,SetTime,8,0);
@@ -506,6 +507,7 @@ void Key_RightEvt(void)
 		else if(SysParam.SysMode==MODE_TEMP)staBar[5] = 'M';
 		else if(SysParam.SysMode==MODE_GAME)
 		{			
+			GPIO_LED_Disable();
 			staBar[5] = 'M';	
 			Sanke_Init();
 		}
@@ -531,8 +533,8 @@ void Key_RightEvt(void)
 	{
 		if(SysParam.SysMode == MODE_TIMESET || SysParam.SysMode == MODE_ALARM)
 		{
-			tim_SetCnt++;
-			if(tim_SetCnt>TIME_SET_ID_YEAR)tim_SetCnt = TIME_SET_ID_HOUR;
+			sysCtrlFlag.tim_SetCnt++;
+			if(sysCtrlFlag.tim_SetCnt>TIME_SET_ID_YEAR)sysCtrlFlag.tim_SetCnt = TIME_SET_ID_HOUR;
 		}
 		else if(SysParam.SysMode == MODE_GAME)
 		{
@@ -552,12 +554,12 @@ void Key_RightEvt(void)
 void Key_EnterEvt(void)
 {
 	U8 temp = 0;
-	if(sel_Fg!=1)
+	if(sw_flag.sel_Fg!=1)
 	{
 		if(SysParam.SysMode == MODE_NORMALLY || SysParam.SysMode == MODE_CPU_DATA)
 		{
-			sel_Fg = 1;
-			mode_Fg = 1;
+			sw_flag.sel_Fg = 1;
+			sw_flag.mode_Fg = 1;
 			staBar[5] = 'S';
 			SysParam.SysMode = MODE_SECLECT;
 		}
@@ -571,13 +573,13 @@ void Key_EnterEvt(void)
 			(((SetTime[DS_TIME_MIN]/10))<<4|(SetTime[DS_TIME_MIN]%10)),
 			0,0);
 			
-			beepFlag = 200;
+			sysCtrlFlag.beepFlag = 200;
 			SysParam.SysMode = MODE_NORMALLY;
 		}
 		else if(SysParam.SysMode == MODE_ALARM)
 		{
 			Save_ALMTime();
-			beepFlag = 200;
+			sysCtrlFlag.beepFlag = 200;
 			SysParam.SysMode = MODE_NORMALLY;
 		}
 		else if(SysParam.SysMode == MODE_GAME)
@@ -600,10 +602,10 @@ void Key_EnterEvt(void)
 void Key_CacelEvt(void)
 {
 	
-	if(sel_Fg==1)
+	if(sw_flag.sel_Fg==1)
 	{
 		SysParam.SysMode = MODE_NORMALLY;
-		sel_Fg = 0;
+		sw_flag.sel_Fg = 0;
 		staBar[5] = 'M';
 	}
 	else
@@ -613,6 +615,7 @@ void Key_CacelEvt(void)
 			if(SysParam.SysMode==MODE_GAME)
 			{
 				Dispose_Game();
+				GPIO_LED_Enable();
 			}
 			else if(SysParam.SysMode==MODE_LOWP)
 			{
@@ -693,13 +696,13 @@ void ALM_Proc(void)
 	{
 		if(DS1302_time[DS_TIME_HOUR]==AlmTime[DS_TIME_HOUR] && DS1302_time[DS_TIME_MIN]==AlmTime[DS_TIME_MIN] && DS1302_time[DS_TIME_SEC]<=20)
 		{
-			beepFlag = 255;
-			usb_SwFg = 1;
-			SetPowerSta(usb_SwFg);
-			if(temp_sw_fg!=usb_SwFg)
+			sysCtrlFlag.beepFlag = 255;
+			sysCtrlFlag.usb_SwFg = 1;
+			SetPowerSta(sysCtrlFlag.usb_SwFg);
+			if(temp_sw_fg!=sysCtrlFlag.usb_SwFg)
 			{
-				AT24C02_WriteOneByte(SW_EEPADDR,usb_SwFg%2==0?0x00:0x01);
-				temp_sw_fg = usb_SwFg;
+				AT24C02_WriteOneByte(SW_EEPADDR,sysCtrlFlag.usb_SwFg%2==0?0x00:0x01);
+				temp_sw_fg = sysCtrlFlag.usb_SwFg;
 			}
 		}
   }
@@ -804,7 +807,7 @@ void PWR_Sleep_Mode(U8 mcu_status)
 		
 		OLED_Display_On();
 		dis_cnt = 0;
-		sel_Fg = 0;	
+		sw_flag.sel_Fg = 0;	
 	}
 }
 

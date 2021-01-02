@@ -6,8 +6,8 @@ U8 Usart_Rx_Buf[USART_BUF_LEN],Usart_Rec_Buf[USART_BUF_LEN];   //串口接收数组
 U8 Rx_Sta = 0,heartCnt = 0,tx_cnt = 0,rx_cnt = 0;
 //外部变量：
 extern SYSTEMSTRUCT SysParam;
+extern SYSTEM_CTRL_FLAG sysCtrlFlag;
 extern U8 wr_Code[],DS1302_time[];
-extern U8 usb_SwFg;
 extern short dsbDat;
 
 
@@ -119,10 +119,10 @@ void USART_Deal(U8 flag)
 						else BEEP_OFF;						
 					break;					
 					case BLE_FUNC_ITEM_USB:
-							if(Usart_Rec_Buf[4]==0x00)usb_SwFg = 0x00;						
-							else                      usb_SwFg = 0x01;
-					    SetPowerSta(usb_SwFg);
-					    AT24C02_WriteOneByte(SW_EEPADDR,usb_SwFg%2==0?0x00:0x01);				
+							if(Usart_Rec_Buf[4]==0x00)sysCtrlFlag.usb_SwFg = 0x00;						
+							else                      sysCtrlFlag.usb_SwFg = 0x01;
+					    SetPowerSta(sysCtrlFlag.usb_SwFg);
+					    AT24C02_WriteOneByte(SW_EEPADDR,sysCtrlFlag.usb_SwFg%2==0?0x00:0x01);				
 					break;
 					default:break;
 					

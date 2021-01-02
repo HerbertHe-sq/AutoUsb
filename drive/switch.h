@@ -6,6 +6,20 @@
 #define SW_SEL_LINE 3
 #define SW_SUM 6
 
+typedef enum{
+	KEY_FUNC_LEFT = 0,
+	KEY_FUNC_UP,
+	KEY_FUNC_ENTER,
+	KEY_FUNC_RIGHT,
+	KEY_FUNC_DOWN,
+	KEY_FUNC_CANCEL
+}key_func_id_t;
+
+typedef struct{
+	U8 mode_Fg;
+	U8 sel_Fg;//模式标志位
+}SEITCH_FLAG;
+
 void SW_Delay(U8 de_Count);
 U8 Switch_Scan(void);
 void Switch_Sfit(U8 flag);
