@@ -3,7 +3,7 @@
 <title>Static Call Graph - [.\test.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image .\test.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060960: Last Updated: Sat Jan 02 22:43:31 2021
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060960: Last Updated: Sun Jan 03 16:55:36 2021
 <BR><P>
 <H3>Maximum Stack Usage =        240 bytes + Unknown(Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -224,6 +224,7 @@ Global Symbols
 <BR>[Calls]<UL><LI><a href="#[4e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GPIO_Init
 </UL>
 <BR>[Called By]<UL><LI><a href="#[b2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Key_CacelEvt
+<LI><a href="#[ab]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PWR_Sleep_Mode
 </UL>
 
 <P><STRONG><a name="[52]"></a>GPIO_LED_Disable</STRONG> (Thumb, 56 bytes, Stack size 16 bytes, user.o(.text))
@@ -232,6 +233,7 @@ Global Symbols
 <BR>[Calls]<UL><LI><a href="#[4e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GPIO_Init
 </UL>
 <BR>[Called By]<UL><LI><a href="#[b6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Key_RightEvt
+<LI><a href="#[ab]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PWR_Sleep_Mode
 </UL>
 
 <P><STRONG><a name="[34]"></a>SysTick05ms</STRONG> (Thumb, 52 bytes, Stack size 8 bytes, user.o(.text))
@@ -332,7 +334,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[36]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;UserInit
 </UL>
 
-<P><STRONG><a name="[43]"></a>OLED_Display</STRONG> (Thumb, 2782 bytes, Stack size 24 bytes, user.o(.text))
+<P><STRONG><a name="[43]"></a>OLED_Display</STRONG> (Thumb, 2778 bytes, Stack size 24 bytes, user.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 232<LI>Call Chain = OLED_Display &rArr; ADC1_Process_Temp &rArr; ADC1_Process_Pot &rArr; __aeabi_dmul &rArr; _double_epilogue &rArr; __aeabi_llsr
 </UL>
 <BR>[Calls]<UL><LI><a href="#[78]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_fmul
@@ -1447,7 +1449,7 @@ Global Symbols
 <LI><a href="#[ab]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PWR_Sleep_Mode
 </UL>
 
-<P><STRONG><a name="[ab]"></a>PWR_Sleep_Mode</STRONG> (Thumb, 194 bytes, Stack size 8 bytes, switch.o(.text))
+<P><STRONG><a name="[ab]"></a>PWR_Sleep_Mode</STRONG> (Thumb, 202 bytes, Stack size 8 bytes, switch.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 140<LI>Call Chain = PWR_Sleep_Mode &rArr; USART_Config &rArr; USART_Init &rArr; RCC_GetClocksFreq &rArr; __aeabi_uidivmod
 </UL>
 <BR>[Calls]<UL><LI><a href="#[ad]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DMA_Cmd
@@ -1462,6 +1464,8 @@ Global Symbols
 <LI><a href="#[4d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RCC_APB1PeriphClockCmd
 <LI><a href="#[4b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RCC_AHBPeriphClockCmd
 <LI><a href="#[50]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GPIO_Write
+<LI><a href="#[52]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GPIO_LED_Disable
+<LI><a href="#[51]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GPIO_LED_Enable
 <LI><a href="#[2d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART_Config
 <LI><a href="#[2e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TIM_Config
 <LI><a href="#[3b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SetPowerSta
@@ -1489,7 +1493,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[bf]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Key_Process
 </UL>
 
-<P><STRONG><a name="[b3]"></a>Key_DownEvt</STRONG> (Thumb, 734 bytes, Stack size 8 bytes, switch.o(.text))
+<P><STRONG><a name="[b3]"></a>Key_DownEvt</STRONG> (Thumb, 732 bytes, Stack size 8 bytes, switch.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 16<LI>Call Chain = Key_DownEvt &rArr; __ARM_common_switch8
 </UL>
 <BR>[Calls]<UL><LI><a href="#[b5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Key_Down_Move
@@ -1676,7 +1680,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[b6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Key_RightEvt
 </UL>
 
-<P><STRONG><a name="[7d]"></a>Upload_RtcTime</STRONG> (Thumb, 336 bytes, Stack size 32 bytes, ble.o(.text))
+<P><STRONG><a name="[7d]"></a>Upload_RtcTime</STRONG> (Thumb, 326 bytes, Stack size 32 bytes, ble.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 48<LI>Call Chain = Upload_RtcTime &rArr; USART_SendDat
 </UL>
 <BR>[Calls]<UL><LI><a href="#[4a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_uidivmod

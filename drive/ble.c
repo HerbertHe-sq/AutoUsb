@@ -3,7 +3,8 @@
 
 //内部变量：
 U8 Usart_Rx_Buf[USART_BUF_LEN],Usart_Rec_Buf[USART_BUF_LEN];   //串口接收数组
-U8 Rx_Sta = 0,heartCnt = 0,tx_cnt = 0,rx_cnt = 0;
+BLE_STATUS bleStatus={0,0,0,0};
+
 //外部变量：
 extern SYSTEMSTRUCT SysParam;
 extern SYSTEM_CTRL_FLAG sysCtrlFlag;
@@ -36,22 +37,22 @@ void USART_Rec(void)
     rx_i++;	
     if(dat==0xf7||dat==0x4b)
 		{
-			Rx_Sta = rx_i;
+			bleStatus.Rx_Sta = rx_i;
 			rx_i = 0;
 		}
     if(SysParam.SysMode==MODE_BTVE && rx_i>=21)//针对BLE版本接收
 		{
-			Rx_Sta = rx_i;
+			bleStatus.Rx_Sta = rx_i;
 			rx_i = 0;
 		}
 		else if(SysParam.SysMode==MODE_BTAD && rx_i>=19)
 		{
-			Rx_Sta = rx_i;
+			bleStatus.Rx_Sta = rx_i;
 			rx_i = 0;
 		}
 		else{;}
 			
-		rx_cnt++;//更新指示灯
+		bleStatus.rx_cnt++;//更新指示灯
   } 
 }
 
@@ -70,10 +71,10 @@ U8 USART_Unpack(void)
 	
 	p_buf = Usart_Rec_Buf;
 
-	if(Rx_Sta)
+	if(bleStatus.Rx_Sta)
 	{
-		index = Rx_Sta;
-		Rx_Sta = 0;
+		index = bleStatus.Rx_Sta;
+		bleStatus.Rx_Sta = 0;
 		for(ua_i = 0;ua_i<index;ua_i++)
 		{
 			*p_buf++=Usart_Rx_Buf[ua_i];
@@ -119,10 +120,10 @@ void USART_Deal(U8 flag)
 						else BEEP_OFF;						
 					break;					
 					case BLE_FUNC_ITEM_USB:
-							if(Usart_Rec_Buf[4]==0x00)sysCtrlFlag.usb_SwFg = 0x00;						
-							else                      sysCtrlFlag.usb_SwFg = 0x01;
+							if(Usart_Rec_Buf[4]==0x00)sysCtrlFlag.usb_SwFg = USB_SW_OFF;						
+							else                      sysCtrlFlag.usb_SwFg = USB_SW_ON;
 					    SetPowerSta(sysCtrlFlag.usb_SwFg);
-					    AT24C02_WriteOneByte(SW_EEPADDR,sysCtrlFlag.usb_SwFg%2==0?0x00:0x01);				
+					    AT24C02_WriteOneByte(SW_EEPADDR,sysCtrlFlag.usb_SwFg%2==0?USB_SW_OFF:USB_SW_ON);				
 					break;
 					default:break;
 					
@@ -138,7 +139,7 @@ void USART_Deal(U8 flag)
 				{
 					if(Usart_Rec_Buf[4]==0x7f && Usart_Rec_Buf[5]==0x01)
 					{
-						heartCnt = 0;
+						bleStatus.heartCnt = 0;
 					}
 				}
 				else{;}
@@ -177,7 +178,7 @@ void USART_SendDat(U8 *buf,U8 len)
 		USART_SendData(USART1,buf[temp_i]);
 		while (USART_GetFlagStatus(USART1, USART_FLAG_TC) == RESET);
 	}
-	tx_cnt++;//更新指示灯
+	bleStatus.tx_cnt++;//更新指示灯
 }
 
 // *****************************************************************************
@@ -310,7 +311,7 @@ void TIME_IRQHandler(void)
 		if(time_cnt%10==0)
 		{
 			USART_SendDat(send_buf,7);
-			heartCnt++;
+			bleStatus.heartCnt++;
 		}
 		time_cnt++;	
 		

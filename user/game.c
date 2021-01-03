@@ -3,7 +3,7 @@
 
 //内部变量
 SNAKE_BODY* Sanke_Body;   //蛇身链表
-SNAKE_PARAM Snake_Param={1,4,0,0,0,1};  //蛇参数 //蛇身长度  //方向标志位-默认向右  //刷新标志位   //游戏结果   //记分    
+SNAKE_PARAM Snake_Param={1,4,0,0,0,1};  //蛇参数  
 U8 Sanke_Fool_Buf[SNAKE_FOOL_ITEM_NUM]; //食物数组
 
 //外部变量

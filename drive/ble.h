@@ -20,6 +20,13 @@ typedef enum{
 	BLE_FUNC_ITEM_NUM
 }ble_func_id_t;
 
+typedef struct{
+	U8 Rx_Sta;
+	U8 heartCnt;
+	U8 tx_cnt;
+	U8 rx_cnt;
+}BLE_STATUS;
+
 
 void USART_Rec(void);
 U8 USART_Unpack(void);

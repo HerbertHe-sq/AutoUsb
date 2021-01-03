@@ -15,6 +15,11 @@ typedef enum{
 	KEY_FUNC_CANCEL
 }key_func_id_t;
 
+typedef enum{
+	USB_SW_OFF = 0,
+	USB_SW_ON
+}usb_sw_state_t;
+
 typedef struct{
 	U8 mode_Fg;
 	U8 sel_Fg;//模式标志位

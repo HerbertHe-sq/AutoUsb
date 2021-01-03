@@ -43,12 +43,12 @@ struct snake_body{
 typedef struct snake_body SNAKE_BODY;
 
 typedef struct snake_param{
-	U8 Sanke_Len;
-	U8 Direct_Flag;
-	U8 Snake_RefleshFg;
-	U8 Game_Result;
-	U8 Game_Score;
-	U8 Snake_Speed;
+	U8 Sanke_Len;          //蛇身长度            
+	U8 Direct_Flag;        //方向标志位-默认向右
+	U8 Snake_RefleshFg;    //刷新标志位 
+	U8 Game_Result;        //游戏结果
+	U8 Game_Score;         //记分
+	U8 Snake_Speed;        //速度
 }SNAKE_PARAM;
 
 

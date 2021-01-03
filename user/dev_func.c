@@ -4,8 +4,9 @@
 //外部变量：
 extern SYSTEMSTRUCT SysParam;
 extern SYSTEM_CTRL_FLAG sysCtrlFlag;
+extern BLE_STATUS bleStatus;
 extern U8 staBar[],dailyStr[],timeStr[];
-extern U8 tx_cnt,rx_cnt;
+
 
 // *****************************************************************************
 // 函数名称：BT_Usart_Rec
@@ -100,10 +101,10 @@ void Signal_LED(void)
 	if(!sysCtrlFlag.sLedFlag)
 	{
 		sysCtrlFlag.sLedFlag = 255;
-		if(tx_cnt%2==1)LED1_ON;
+		if(bleStatus.tx_cnt%2==1)LED1_ON;
 		else LED1_OFF;
 		
-		if(rx_cnt%2==1)LED2_ON;
+		if(bleStatus.rx_cnt%2==1)LED2_ON;
 		else LED2_OFF;
 	}
 }

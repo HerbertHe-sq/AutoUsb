@@ -8,7 +8,7 @@ U8 staBar[] = "R:00 M:G    B:LE";//red_w_Code[3];
 short dsbDat = 0;
 
 //外部变量
-extern U8 heartCnt,rx_cnt;
+extern BLE_STATUS bleStatus;
 extern SYSTEMSTRUCT SysParam;
 extern SYSTEM_CTRL_FLAG sysCtrlFlag;
 extern SNAKE_PARAM  Snake_Param;
@@ -467,12 +467,12 @@ void OLED_Display(void)
 			staBar[10] = ' ';
 			
 			staBar[12] = 'B';		
-			if(heartCnt>4)
+			if(bleStatus.heartCnt>4)
 			{
 				staBar[14] = 'N';
 				staBar[15] = 'C';
 				LED2_OFF;
-				rx_cnt = 0;
+				bleStatus.rx_cnt = 0;
 			}
 			else 
 			{

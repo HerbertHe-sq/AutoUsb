@@ -469,7 +469,7 @@ void Key_LeftEvt(void)
 	{
 		sysCtrlFlag.usb_SwFg++;
 		SetPowerSta(sysCtrlFlag.usb_SwFg);
-		AT24C02_WriteOneByte(SW_EEPADDR,sysCtrlFlag.usb_SwFg%2==0?0x00:0x01);
+		AT24C02_WriteOneByte(SW_EEPADDR,sysCtrlFlag.usb_SwFg%2==0?USB_SW_OFF:USB_SW_ON);
 	}
 	else if(SysParam.SysMode == MODE_GAME)
 	{
@@ -697,11 +697,11 @@ void ALM_Proc(void)
 		if(DS1302_time[DS_TIME_HOUR]==AlmTime[DS_TIME_HOUR] && DS1302_time[DS_TIME_MIN]==AlmTime[DS_TIME_MIN] && DS1302_time[DS_TIME_SEC]<=20)
 		{
 			sysCtrlFlag.beepFlag = 255;
-			sysCtrlFlag.usb_SwFg = 1;
+			sysCtrlFlag.usb_SwFg = USB_SW_OFF;
 			SetPowerSta(sysCtrlFlag.usb_SwFg);
 			if(temp_sw_fg!=sysCtrlFlag.usb_SwFg)
 			{
-				AT24C02_WriteOneByte(SW_EEPADDR,sysCtrlFlag.usb_SwFg%2==0?0x00:0x01);
+				AT24C02_WriteOneByte(SW_EEPADDR,sysCtrlFlag.usb_SwFg%2==0?USB_SW_OFF:USB_SW_ON);
 				temp_sw_fg = sysCtrlFlag.usb_SwFg;
 			}
 		}
@@ -778,7 +778,7 @@ void PWR_Sleep_Mode(U8 mcu_status)
 		TIM_CtrlPWMOutputs(TIM3, DISABLE);	                    //PWMÊä³öêP
 		
 		GPIO_Write(GPIOA,(GPIOA->ODR|0x00B0));
-		
+		GPIO_LED_Disable();
 		OLED_Display_Off();   //¹Ø±ÕÆÁÄ»		
 		SetPowerSta(0);
 		dis_cnt = 1;
@@ -806,6 +806,8 @@ void PWR_Sleep_Mode(U8 mcu_status)
 		NVIC_Configuration();
 		
 		OLED_Display_On();
+		
+		GPIO_LED_Enable();
 		dis_cnt = 0;
 		sw_flag.sel_Fg = 0;	
 	}
