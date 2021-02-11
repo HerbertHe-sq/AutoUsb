@@ -34,6 +34,9 @@ void Sysclk_Interrupt(void)
 // *****************************************************************************
 void Sys_Init(void)
 {
+	//
+  //STM32_Clock_Init(8);
+	
 	//  System clock configuration
 	RCC_Configuration();   
     
@@ -48,6 +51,9 @@ void Sys_Init(void)
 	
 	//ADC
 	Read_IVot_Init();
+	
+	//DMA
+	DMA1_Init();
 	
 	// Nested Vector Interrupt Controller configuration
 	NVIC_Configuration();
@@ -65,7 +71,9 @@ void Sys_Init(void)
 	SysTick05ms();
 	
 	//Watch Dog
-  IWDG_Init();        
+#ifdef IWDG_ENV	
+  IWDG_Init(); 
+#endif	
 }
 
 
@@ -124,13 +132,15 @@ int main(void)
 	while(1)
 	{
 		//∂¿¡¢ø¥√≈π∑£¨∑¿÷π≥Ã–Ú≈‹∑…
+#ifdef IWDG_ENV	
 		IWDG_ReloadCounter(); 
+#endif		
 
     //…Ë±∏…®√Ë
     Device_Scan();
 		
     //∆¡ƒªœ‘ æ
-		OLED_Display();		
+		OLED_Display();			
 	}
 }
 

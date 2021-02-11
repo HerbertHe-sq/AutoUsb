@@ -139,13 +139,16 @@ void Snake_RunStep(void)
 		
 	srand(time_count);        //初始化随机数据
 	time_count++;
-	if(SysParam.SysMode==MODE_GAME && time_count%Snake_Param.Snake_Speed==0 && Snake_Param.Snake_RefleshFg == SNAKE_REFLESH_ON)
+	if(SysParam.SysMode==MODE_GAME && 
+		 time_count%Snake_Param.Snake_Speed==0 && 
+	   Snake_Param.Snake_RefleshFg == SNAKE_REFLESH_ON)
 	{		
     //清理屏幕	  
 		Clear_Map();		
 		
 		//判断蛇头是否吃到食物
-		if(Sanke_Body->Snake_X==Sanke_Fool_Buf[SNAKE_FOOL_LOCAL_X] && Sanke_Body->Snake_Y==Sanke_Fool_Buf[SNAKE_FOOL_LOCAL_Y])
+		if(Sanke_Body->Snake_X==Sanke_Fool_Buf[SNAKE_FOOL_LOCAL_X] 
+		&& Sanke_Body->Snake_Y==Sanke_Fool_Buf[SNAKE_FOOL_LOCAL_Y])
 		{
 			//链表增加
 			Snake_EatFool(Sanke_Fool_Buf[SNAKE_FOOL_LOCAL_X],Sanke_Fool_Buf[SNAKE_FOOL_LOCAL_Y]);

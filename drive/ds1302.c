@@ -185,7 +185,6 @@ void DS1302_GetTime(void)
 	for(i=0;i<7;i++)
 	{
 		DS1302_time[i]=DS1302_Read(0x81+2*i);  //读出DS1302的时间信息，保存到数组中
-		DS1302_time[i] = ((DS1302_time[i]>>4)&0x0f)*10 + (DS1302_time[i]&0x0f);
-		
+		DS1302_time[i] = ((DS1302_time[i]>>4)&0x0f)*10 + (DS1302_time[i]&0x0f);		
 	}
 }

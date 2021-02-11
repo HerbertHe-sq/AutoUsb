@@ -29,6 +29,8 @@
 #include "ds18b20.h"
 
 
+#define IWDG_ENV
+
 #define MODE_NORMALLY  0           //普通模式
 #define MODE_TIMESET   1           //时间设置模式
 #define MODE_ALARM     2           //定时模式

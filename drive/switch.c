@@ -638,6 +638,7 @@ void Key_CacelEvt(void)
 			dailyStr[13] = ' ';
 			dailyStr[14] = ' ';
 			dailyStr[15] = ' ';
+		  sysCtrlFlag.pwFlag = 1;
 		}
 		else
 		{

@@ -13,7 +13,15 @@
 #define BEEP_OFF        GPIO_ResetBits(GPIOA,GPIO_Pin_6)
 #define READ_POWER_PIN  GPIO_ReadInputDataBit(GPIOA,GPIO_Pin_8)
 
+typedef enum
+{
+	UPDATE_FUNC_MAP=0,
+	UPDATE_FUNC_RTCTIME,
+	UPDATE_FUNC_UART_TX,
+	UPDATE_FUNC_ITEM_NUM
+}update_func_t;
 
+//void STM32_Clock_Init(U8 PLL);
 void RCC_Configuration(void);
 void GPIO_Configuration(void);
 void GPIO_LED3_Config(void);
@@ -23,6 +31,7 @@ void SysTick05ms(void);
 void EXIT_Config(void);
 void TIM_Config(void);
 void USART_Config(void);
+void DMA1_Init(void);
 void NVIC_Configuration(void);
 void IWDG_Init(void);
 void Device_Scan(void);

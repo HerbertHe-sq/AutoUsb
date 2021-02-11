@@ -147,6 +147,26 @@ void TIM3_IRQHandler(void)
   PWM_IRQHandler();
 }
 
+void TIM16_IRQHandler(void)
+{ 
+	TIM_OUT_Handler(); 
+}
+
+/**
+  *@brief  DMA1_Channel1中断服务函数
+  *@param  无
+  *@retval 无
+  */
+void DMA1_Channel2_3_IRQHandler(void)  
+{  
+	/*判断DMA传输完成中断*/
+	if(DMA_GetITStatus(DMA1_IT_TC2)!= RESET)                        
+	{
+	  /*清除DMA中断标志位*/   
+	  DMA_ClearITPendingBit(DMA1_IT_TC2); 
+	}	                    
+}
+
 
 //void EXTI0_1_IRQHandler(void)
 //{

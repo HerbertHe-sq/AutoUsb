@@ -7,6 +7,13 @@
 #define CHANNEL   2
 #define CNT       1
 
+typedef enum
+{
+	ADC_FUNC_ITEM_VOT=0,
+	ADC_FUNC_ITEM_TEMP,
+	ADC_FUNC_ITEM_NUM
+}adc_func_t;
+
 
 void Read_IVot_Init(void);
 void ADCTemp_Config(void);

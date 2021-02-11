@@ -61,7 +61,7 @@ void Oled_IIC_Stop(void)
 
 void Oled_IIC_Wait_Ack(void)
 {
-	OLED_SCLK_Set() ;
+	OLED_SCLK_Set();
 	OLED_SCLK_Clr();
 }
 /**********************************************

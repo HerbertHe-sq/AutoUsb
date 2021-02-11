@@ -14,6 +14,80 @@ extern SYSTEM_CTRL_FLAG sysCtrlFlag;
 extern SNAKE_PARAM  Snake_Param;
 extern U8 DS1302_time[],SetTime[],AlmTime[];
 
+typedef void(*update_func_cbk)(void);
+typedef float(*adc_func_cbk)(void);
+
+//刷新屏幕函数
+update_func_cbk update_func[UPDATE_FUNC_ITEM_NUM] = {
+ Update_Map,
+ Upload_RtcTime,
+ Usart_Tx_Data
+};
+
+//ADC获取定义
+adc_func_cbk adc_func[ADC_FUNC_ITEM_NUM]=
+{
+	ADC1_Process_Pot,
+	ADC1_Process_Temp
+};
+
+//void STM32_Clock_Init(uint8_t PLL)
+//{
+//  __IO uint32_t StartUpCounter = 0, HSEStatus = 0;
+//  /* SYSCLK, HCLK, PCLK configuration ----------------------------------------*/
+//  /* Enable HSE */    
+//  RCC->CR |= ((uint32_t)RCC_CR_HSEON);//使用外部8M时钟
+////RCC->CR |= ((uint32_t)RCC_CR_HSION);//使用内部8M时钟
+//  /* Wait till HSE is ready and if Time out is reached exit */
+//  do
+//  {
+//    HSEStatus = RCC->CR & RCC_CR_HSERDY;//使用外部8M时钟
+////  HSEStatus = RCC->CR & RCC_CR_HSIRDY;//使用内部8M时钟
+//    StartUpCounter++;  
+//  } 
+//  while((HSEStatus == 0) && (StartUpCounter != HSE_STARTUP_TIMEOUT));//使用外部8M时钟
+////  while((HSEStatus == 0) && (StartUpCounter != HSI_STARTUP_TIMEOUT));//使用内部8M时钟
+//  if ((RCC->CR & RCC_CR_HSERDY) != RESET)//使用外部8M时钟
+////  if ((RCC->CR & RCC_CR_HSIRDY) != RESET)//使用内部8M时钟
+//  {
+//    HSEStatus = (uint32_t)0x01;
+//  }
+//  else
+//  {
+//    HSEStatus = (uint32_t)0x00;
+//  }  
+//  if (HSEStatus == (uint32_t)0x01)
+//  {
+//    /* Enable Prefetch Buffer */
+//    FLASH->ACR |= FLASH_ACR_PRFTBE;
+//    FLASH->ACR |= (uint32_t)FLASH_ACR_LATENCY;
+//    /* HCLK = SYSCLK */
+//    RCC->CFGR |= (uint32_t)RCC_CFGR_HPRE_DIV1;    
+//    /* PCLK = HCLK */
+//    RCC->CFGR |= (uint32_t)RCC_CFGR_PPRE_DIV1;
+//    /*  PLL configuration:  = HSE *  6 = 48 MHz */
+//    RCC->CFGR &= (uint32_t)((uint32_t)~(RCC_CFGR_PLLSRC | RCC_CFGR_PLLXTPRE | RCC_CFGR_PLLMULL));//使用外部8M时钟
+//    RCC->CFGR |= (uint32_t)(RCC_CFGR_PLLSRC_PREDIV1 | RCC_CFGR_PLLXTPRE_PREDIV1 | RCC_CFGR_PLLMULL6);//使用外部8M时钟
+////  RCC->CFGR |= (uint32_t)(RCC_CFGR_PLLSRC_PREDIV1|RCC_CFGR_PLLXTPRE_PREDIV1_Div2 | RCC_CFGR_PLLMULL9);//内外都不使用
+////  RCC->CFGR |= (uint32_t)(RCC_CFGR_PLLSRC_HSI_Div2|RCC_CFGR_PLLXTPRE_PREDIV1|RCC_CFGR_PLLMULL9);//使用内部8M时钟
+//   /* Enable PLL */
+//    RCC->CR |= RCC_CR_PLLON;
+//    /* Wait till PLL is ready */
+//    while((RCC->CR & RCC_CR_PLLRDY) == 0)
+//    {
+//    }
+//    /* Select PLL as system clock source */
+//    RCC->CFGR &= (uint32_t)((uint32_t)~(RCC_CFGR_SW));
+//    RCC->CFGR |= (uint32_t)RCC_CFGR_SW_PLL;    
+//    /* Wait till PLL is used as system clock source */
+//    while ((RCC->CFGR & (uint32_t)RCC_CFGR_SWS) != (uint32_t)0x08){}
+//  }
+//  else
+//  { /* If HSE fails to start-up, the application will have wrong clock 
+//    configuration. User can add here some code to deal with this error */
+//  }
+//                           
+//}
 
 // *****************************************************************************
 // 函数名称：RCC_Configuration
@@ -26,7 +100,7 @@ void RCC_Configuration(void)
 {
 	 //SystemInit();
    RCC_AHBPeriphClockCmd(RCC_AHBPeriph_GPIOA|RCC_AHBPeriph_GPIOB,ENABLE);	//打开GPIOA时钟
-   RCC_APB2PeriphClockCmd(RCC_APB2Periph_USART1,ENABLE);	//打开USART时钟
+   RCC_APB2PeriphClockCmd(RCC_APB2Periph_USART1|RCC_APB2Periph_TIM16,ENABLE);	//打开USART时钟
 	 RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM3|RCC_APB1Periph_TIM2,ENABLE);    //打开定时器时钟
 }
 
@@ -58,15 +132,16 @@ void GPIO_Configuration(void)
   GPIO_InitStruct.GPIO_PuPd = GPIO_PuPd_UP;
   GPIO_Init(GPIOB, &GPIO_InitStruct);
 	
-	GPIO_PinAFConfig(GPIOA,GPIO_PinSource7,GPIO_AF_1);
-	GPIO_PinAFConfig(GPIOA,GPIO_PinSource9,GPIO_AF_1);
-  GPIO_PinAFConfig(GPIOA,GPIO_PinSource10,GPIO_AF_1);  
+	GPIO_PinAFConfig(GPIOA,GPIO_PinSource7,GPIO_AF_1);	 
 	
 	GPIO_InitStruct.GPIO_Pin = GPIO_Pin_9|GPIO_Pin_10;    //USART1_TX USART1_RX
   GPIO_InitStruct.GPIO_Mode = GPIO_Mode_AF; 
   GPIO_InitStruct.GPIO_OType = GPIO_OType_PP;
   GPIO_InitStruct.GPIO_Speed =GPIO_Speed_Level_3;
   GPIO_Init(GPIOA, &GPIO_InitStruct);	
+	
+	GPIO_PinAFConfig(GPIOA,GPIO_PinSource9,GPIO_AF_1);
+  GPIO_PinAFConfig(GPIOA,GPIO_PinSource10,GPIO_AF_1); 
 	
 	//初始化LED
 	GPIO_Write(GPIOA,(GPIOA->ODR|0x00B0));
@@ -157,7 +232,7 @@ void USART_Config(void)
 	
    USART_DeInit(USART1);
     	
-   USART_InitStructure.USART_BaudRate = 9600;     //波特率9600
+   USART_InitStructure.USART_BaudRate = 115200;     //波特率9600
    USART_InitStructure.USART_WordLength = USART_WordLength_8b;
    USART_InitStructure.USART_StopBits = USART_StopBits_1;
    USART_InitStructure.USART_Parity = USART_Parity_No;
@@ -166,7 +241,33 @@ void USART_Config(void)
    USART_Init(USART1, &USART_InitStructure);
   
    USART_ITConfig(USART1, USART_IT_RXNE, ENABLE); //IT
-   USART_Cmd(USART1,ENABLE);//USART1
+	 USART_ClearFlag(USART1,USART_FLAG_TC);
+   USART_DMACmd(USART1,USART_DMAReq_Tx,ENABLE);
+   USART_Cmd(USART1,ENABLE);//USART1 
+}
+
+void DMA1_Init(void)
+{
+   DMA_InitTypeDef DMA_InitStructure;
+   RCC_AHBPeriphClockCmd(RCC_AHBPeriph_DMA1,ENABLE);
+   
+   DMA_InitStructure.DMA_BufferSize = 16; // 缓存大小
+   DMA_InitStructure.DMA_M2M = DMA_M2M_Disable;    // 内存到内存关闭
+   DMA_InitStructure.DMA_Mode = DMA_Mode_Normal;   // 普通模式
+   DMA_InitStructure.DMA_DIR = DMA_DIR_PeripheralDST;  // 内存到外设
+   DMA_InitStructure.DMA_Priority = DMA_Priority_High; // DMA通道优先级
+   DMA_InitStructure.DMA_MemoryInc = DMA_MemoryInc_Enable;// 内存地址递增
+   DMA_InitStructure.DMA_PeripheralBaseAddr =(uint32_t)&USART1->TDR;   // 外设地址   
+   DMA_InitStructure.DMA_PeripheralInc = DMA_PeripheralInc_Disable;// 外设地址不变
+   DMA_InitStructure.DMA_MemoryDataSize = DMA_MemoryDataSize_Byte; // 内存数据长度
+   DMA_InitStructure.DMA_MemoryBaseAddr = (uint32_t)&uart_tx_buf;   // 定义内存基地址
+   DMA_InitStructure.DMA_PeripheralDataSize =DMA_PeripheralDataSize_Byte;//外设数据长度
+   
+   DMA_Init(DMA1_Channel2,&DMA_InitStructure);
+   DMA_ClearITPendingBit(DMA1_IT_TC2); // 清除一次DMA中断标志
+   DMA_ITConfig(DMA1_Channel2,DMA_IT_TC,ENABLE);// 使能DMA传输完成中断
+   
+   DMA_Cmd(DMA1_Channel2,ENABLE);
 }
 
 
@@ -215,6 +316,17 @@ void TIM_Config(void)
   TIM_ClearFlag(TIM2, TIM_FLAG_Update); //清除溢出中断标志
   TIM_ITConfig(TIM2,TIM_IT_Update,ENABLE);
   TIM_Cmd(TIM2, ENABLE);
+	
+	TIM_DeInit(TIM16);
+  TIM_TimeBaseStructure.TIM_Period=(1000-1);	//自动重装载值 计算方法：（重装载值/时钟预分频系数）/系统时钟
+  TIM_TimeBaseStructure.TIM_Prescaler= (48-1);//时钟预分频数
+  TIM_TimeBaseStructure.TIM_ClockDivision=0x0;//采样分频
+  TIM_TimeBaseStructure.TIM_CounterMode=TIM_CounterMode_Up;
+  TIM_TimeBaseInit(TIM1, &TIM_TimeBaseStructure);
+
+  TIM_ClearFlag(TIM16, TIM_FLAG_Update); //清除溢出中断标志
+  TIM_ITConfig(TIM16,TIM_IT_Update,ENABLE);
+  TIM_Cmd(TIM16, ENABLE);
 }
 
 /************************************************
@@ -287,6 +399,16 @@ void NVIC_Configuration(void)     //配置中断优先级
   NVIC_InitStructure.NVIC_IRQChannelPriority = 2;
   NVIC_InitStructure.NVIC_IRQChannelCmd =ENABLE;
   NVIC_Init(&NVIC_InitStructure);		
+	
+	NVIC_InitStructure.NVIC_IRQChannel = TIM16_IRQn; 
+  NVIC_InitStructure.NVIC_IRQChannelPriority = 3;
+  NVIC_InitStructure.NVIC_IRQChannelCmd =ENABLE;
+  NVIC_Init(&NVIC_InitStructure);	
+	
+	NVIC_InitStructure.NVIC_IRQChannel = DMA1_Channel2_3_IRQn;
+  NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
+  NVIC_InitStructure.NVIC_IRQChannelPriority = 2;
+	NVIC_Init(&NVIC_InitStructure);	
 }
 
 /************************************************
@@ -319,6 +441,9 @@ void Device_Scan(void)
 	//SW Scan
 	key_flag = Switch_Scan();
 	if(key_flag)Switch_Sfit(key_flag);
+	
+	//USART TX
+	update_func[UPDATE_FUNC_UART_TX]();
 	
 	//USART Recvice
 	key_flag = USART_Unpack();
@@ -596,8 +721,8 @@ void OLED_Display(void)
 		}
 		else if(SysParam.SysMode == MODE_CPU_DATA) //CPU温度检测
 		{		
-      cpu_vol = ADC1_Process_Pot()*1000;				
-		  cpu_temp = ADC1_Process_Temp()*100;       
+      cpu_vol = adc_func[ADC_FUNC_ITEM_VOT]()*1000;				
+		  cpu_temp = adc_func[ADC_FUNC_ITEM_TEMP]()*100;       
 			
 			dailyStr[3] = 'R';
 			dailyStr[4] = 'E';
@@ -699,7 +824,8 @@ void OLED_Display(void)
 			}
 			else
 			{
-				Update_Map();
+				//Update_Map();
+				update_func[UPDATE_FUNC_MAP]();
 			}
 			OLED_ShowString(0,7,staBar,4);	
 			sup_fg = 0;				
@@ -731,5 +857,6 @@ void OLED_Display(void)
 	}
 	
 	//定时更新时间
-	Upload_RtcTime();
+	//Upload_RtcTime();
+	update_func[UPDATE_FUNC_RTCTIME]();
 }

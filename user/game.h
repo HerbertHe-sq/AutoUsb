@@ -11,6 +11,12 @@
 #define SNAKE_SPEED_MIN 1
 #define SNAKE_SCORE_MAX 29
 
+typedef enum
+{
+	GAME_FUNC_ITEM_RUN=0,
+	GAME_FUNC_ITEM_NUM
+}game_func_item_t;
+
 typedef enum{
 	SNAKE_FOOL_LOCAL_X = 0,
 	SNAKE_FOOL_LOCAL_Y,
