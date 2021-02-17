@@ -14,8 +14,8 @@
  
 #define   DS_RST(x)   		GPIOB->ODR=(GPIOB->ODR&~GPIO_Pin_5) | (x ? GPIO_Pin_5 : 0)
 #define   DS_SCLK(x)		  GPIOB->ODR=(GPIOB->ODR&~GPIO_Pin_3) | (x ? GPIO_Pin_3 : 0)
-#define   DS_WDATA(x)		GPIOB->ODR=(GPIOB->ODR&~GPIO_Pin_4) | (x ? GPIO_Pin_4 : 0)
-#define   DS_READ		GPIO_ReadInputDataBit(GPIOB,GPIO_Pin_4) 
+#define   DS_WDATA(x)		  GPIOB->ODR=(GPIOB->ODR&~GPIO_Pin_4) | (x ? GPIO_Pin_4 : 0)
+#define   DS_READ		      GPIO_ReadInputDataBit(GPIOB,GPIO_Pin_4) 
 
 #define   DS_YEAR_START  2000
 
@@ -27,6 +27,12 @@ typedef enum{
 	DS_TIME_MON = 4,
 	DS_TIME_YEAR = 6
 }ds_time_t;
+
+typedef struct
+{
+	U16 Year;
+	U8 ds_time[8];
+}ds_set_time_t;
 
 void DS1302_Init(void);
 void DS1302_WrByte(U8 dat);

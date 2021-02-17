@@ -2,7 +2,7 @@
 
 //内部变量
 SYSTEMSTRUCT SysParam;
-SYSTEM_CTRL_FLAG sysCtrlFlag={0,0,0,1,1,0,0,0,10,0};
+SYSTEM_CTRL_FLAG sysCtrlFlag={0,0,0,1,1,0,0,0,0,10,0};
 
 //外部变量
 
@@ -34,9 +34,6 @@ void Sysclk_Interrupt(void)
 // *****************************************************************************
 void Sys_Init(void)
 {
-	//
-  //STM32_Clock_Init(8);
-	
 	//  System clock configuration
 	RCC_Configuration();   
     
@@ -114,6 +111,9 @@ void UserInit(void)
 	
 	//执行呼吸灯代表程序正在运行
 	GPIO_LED3_Config();
+	
+	//设置顶部栏状态
+	sysCtrlFlag.pwFlag = 0;
 }
 
 // *****************************************************************************

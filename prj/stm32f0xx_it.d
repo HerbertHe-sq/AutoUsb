@@ -30,6 +30,7 @@
 .\stm32f0xx_it.o: ..\lib\inc\stm32f0xx_misc.h
 .\stm32f0xx_it.o: ..\drive\includes.h
 .\stm32f0xx_it.o: ..\lib\inc\stm32f0xx_adc.h
+.\stm32f0xx_it.o: E:\StudySoftware\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
 .\stm32f0xx_it.o: ..\drive\mydefine.h
 .\stm32f0xx_it.o: ..\drive\user.h
 .\stm32f0xx_it.o: ..\drive\delay.h

@@ -10,7 +10,7 @@ uart_rx_msg_t uart_rx_msg = {0};
 //外部变量：
 extern SYSTEMSTRUCT SysParam;
 extern SYSTEM_CTRL_FLAG sysCtrlFlag;
-extern U8 wr_Code[],DS1302_time[];
+extern U8 DS1302_time[];
 extern short dsbDat;
 
 typedef void(*snake_func_cbk)(void);
@@ -27,7 +27,8 @@ snake_func_cbk snake_func[GAME_FUNC_ITEM_NUM]={Snake_RunStep};
 void USART_Rec(void)
 {
 	if(USART_GetITStatus(USART1, USART_IT_RXNE) != RESET)
-  {         		
+  {       
+    USART_ClearITPendingBit(USART1,USART_IT_RXNE);		
 		if(uart_rx_msg.rx_state==UART_STATE_ITEM_WAIT_ACK)
 		{
 			uart_rx_msg.rx_index = 0;
@@ -35,11 +36,15 @@ void USART_Rec(void)
 			uart_rx_msg.rx_state = UART_STATE_ITEM_RECEIVING;
 			TIM1_Start();			
 		}
-		uart_rx_msg.rx_buf[uart_rx_msg.rx_index++] = ((USART1->RDR) & 0xff);
-		uart_rx_msg.time_cnt = 0;	
+		
+		if(uart_rx_msg.rx_index<USART_BUF_LEN)
+		{
+		  uart_rx_msg.rx_buf[uart_rx_msg.rx_index++] = ((USART1->RDR) & 0xff);
+		  uart_rx_msg.time_cnt = 0;	
+		}
 			
 		bleStatus.rx_cnt++;//更新指示灯
-		USART_ClearITPendingBit(USART1,USART_IT_RXNE);
+		
   }	
 }
 
@@ -64,7 +69,6 @@ U8 USART_Unpack(void)
 			*p_buf++=uart_rx_msg.rx_buf[ua_i];
 			uart_rx_msg.rx_buf[ua_i] = 0;
 		}
-		//memset(uart_rx_msg.rx_buf,0,sizeof(uart_rx_msg.rx_buf));
 		uart_rx_msg.rx_state = UART_STATE_ITEM_WAIT_ACK;
 		flag = 1;	
   }
@@ -244,6 +248,7 @@ void ST_Device_Reset(void)
 {
 	U8 send_buf[]={0xF0,0x5A ,0xA5 ,0x06 ,0x00 ,0x01 ,0xF7};
 	USART_SendDat(send_buf,7);//发送数据
+	__disable_irq();
 	NVIC_SystemReset();//系统复位
 }
 
@@ -329,7 +334,7 @@ void TIME_IRQHandler(void)
 		TIM_ClearITPendingBit(TIM2,TIM_IT_Update);  //清除中断标志位
 						
 		//秒数更新
-		if(time_cnt%2==0)
+		if(time_cnt%10==0)
 		{
 			USART_DMASendDat(send_buf,7);
 			bleStatus.heartCnt++;

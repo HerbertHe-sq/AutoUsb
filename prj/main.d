@@ -29,6 +29,7 @@
 .\main.o: ..\lib\inc\stm32f0xx_wwdg.h
 .\main.o: ..\lib\inc\stm32f0xx_misc.h
 .\main.o: ..\lib\inc\stm32f0xx_adc.h
+.\main.o: E:\StudySoftware\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
 .\main.o: ..\drive\mydefine.h
 .\main.o: ..\drive\user.h
 .\main.o: ..\drive\delay.h

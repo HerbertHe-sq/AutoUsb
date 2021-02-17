@@ -191,7 +191,7 @@ void Game_Stop(U8 *tip_str)
 	Snake_Param.Game_Result = SNAKE_GAME_OVER; //Õ£÷π”Œœ∑
 	Snake_Param.Snake_RefleshFg = SNAKE_REFLESH_OFF;
 	OLED_Clear_Row(2,6);
-	OLED_ShowString(0,2,tip_str,16);
+	OLED_ShowString(0,2,tip_str,16,16);
 }
 
 // *****************************************************************************

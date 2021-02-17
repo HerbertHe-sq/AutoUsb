@@ -29,6 +29,7 @@
 .\switch.o: ..\lib\inc\stm32f0xx_wwdg.h
 .\switch.o: ..\lib\inc\stm32f0xx_misc.h
 .\switch.o: ..\lib\inc\stm32f0xx_adc.h
+.\switch.o: E:\StudySoftware\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
 .\switch.o: ..\drive\mydefine.h
 .\switch.o: ..\drive\user.h
 .\switch.o: ..\drive\delay.h

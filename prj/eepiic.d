@@ -29,6 +29,7 @@
 .\eepiic.o: ..\lib\inc\stm32f0xx_wwdg.h
 .\eepiic.o: ..\lib\inc\stm32f0xx_misc.h
 .\eepiic.o: ..\lib\inc\stm32f0xx_adc.h
+.\eepiic.o: E:\StudySoftware\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
 .\eepiic.o: ..\drive\mydefine.h
 .\eepiic.o: ..\drive\user.h
 .\eepiic.o: ..\drive\delay.h

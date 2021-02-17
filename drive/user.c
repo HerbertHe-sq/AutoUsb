@@ -2,20 +2,11 @@
 #include "bmp.h"
 
 //内部变量
-U8 dailyStr[] = "   2019-03-30   ",dailySet[] = "   2019-03-30   ",wr_Code[] = "    00-00-00    ";
-U8 timeStr[] = "    19:19:00    ",timeSet[] = "    19:19:00    ";//,wr_Space[] = "                ",wr_Set[]="      N0.01     ";
-U8 staBar[] = "R:00 M:G    B:LE";//red_w_Code[3];
-short dsbDat = 0;
-
-//外部变量
-extern BLE_STATUS bleStatus;
-extern SYSTEMSTRUCT SysParam;
-extern SYSTEM_CTRL_FLAG sysCtrlFlag;
-extern SNAKE_PARAM  Snake_Param;
-extern U8 DS1302_time[],SetTime[],AlmTime[];
-
 typedef void(*update_func_cbk)(void);
 typedef float(*adc_func_cbk)(void);
+
+short dsbDat = 0;
+OLED_STR_T ole_str = {"    19:19:00    ","   2019-03-30   ","R:00 M:G    B:LE"};
 
 //刷新屏幕函数
 update_func_cbk update_func[UPDATE_FUNC_ITEM_NUM] = {
@@ -31,63 +22,15 @@ adc_func_cbk adc_func[ADC_FUNC_ITEM_NUM]=
 	ADC1_Process_Temp
 };
 
-//void STM32_Clock_Init(uint8_t PLL)
-//{
-//  __IO uint32_t StartUpCounter = 0, HSEStatus = 0;
-//  /* SYSCLK, HCLK, PCLK configuration ----------------------------------------*/
-//  /* Enable HSE */    
-//  RCC->CR |= ((uint32_t)RCC_CR_HSEON);//使用外部8M时钟
-////RCC->CR |= ((uint32_t)RCC_CR_HSION);//使用内部8M时钟
-//  /* Wait till HSE is ready and if Time out is reached exit */
-//  do
-//  {
-//    HSEStatus = RCC->CR & RCC_CR_HSERDY;//使用外部8M时钟
-////  HSEStatus = RCC->CR & RCC_CR_HSIRDY;//使用内部8M时钟
-//    StartUpCounter++;  
-//  } 
-//  while((HSEStatus == 0) && (StartUpCounter != HSE_STARTUP_TIMEOUT));//使用外部8M时钟
-////  while((HSEStatus == 0) && (StartUpCounter != HSI_STARTUP_TIMEOUT));//使用内部8M时钟
-//  if ((RCC->CR & RCC_CR_HSERDY) != RESET)//使用外部8M时钟
-////  if ((RCC->CR & RCC_CR_HSIRDY) != RESET)//使用内部8M时钟
-//  {
-//    HSEStatus = (uint32_t)0x01;
-//  }
-//  else
-//  {
-//    HSEStatus = (uint32_t)0x00;
-//  }  
-//  if (HSEStatus == (uint32_t)0x01)
-//  {
-//    /* Enable Prefetch Buffer */
-//    FLASH->ACR |= FLASH_ACR_PRFTBE;
-//    FLASH->ACR |= (uint32_t)FLASH_ACR_LATENCY;
-//    /* HCLK = SYSCLK */
-//    RCC->CFGR |= (uint32_t)RCC_CFGR_HPRE_DIV1;    
-//    /* PCLK = HCLK */
-//    RCC->CFGR |= (uint32_t)RCC_CFGR_PPRE_DIV1;
-//    /*  PLL configuration:  = HSE *  6 = 48 MHz */
-//    RCC->CFGR &= (uint32_t)((uint32_t)~(RCC_CFGR_PLLSRC | RCC_CFGR_PLLXTPRE | RCC_CFGR_PLLMULL));//使用外部8M时钟
-//    RCC->CFGR |= (uint32_t)(RCC_CFGR_PLLSRC_PREDIV1 | RCC_CFGR_PLLXTPRE_PREDIV1 | RCC_CFGR_PLLMULL6);//使用外部8M时钟
-////  RCC->CFGR |= (uint32_t)(RCC_CFGR_PLLSRC_PREDIV1|RCC_CFGR_PLLXTPRE_PREDIV1_Div2 | RCC_CFGR_PLLMULL9);//内外都不使用
-////  RCC->CFGR |= (uint32_t)(RCC_CFGR_PLLSRC_HSI_Div2|RCC_CFGR_PLLXTPRE_PREDIV1|RCC_CFGR_PLLMULL9);//使用内部8M时钟
-//   /* Enable PLL */
-//    RCC->CR |= RCC_CR_PLLON;
-//    /* Wait till PLL is ready */
-//    while((RCC->CR & RCC_CR_PLLRDY) == 0)
-//    {
-//    }
-//    /* Select PLL as system clock source */
-//    RCC->CFGR &= (uint32_t)((uint32_t)~(RCC_CFGR_SW));
-//    RCC->CFGR |= (uint32_t)RCC_CFGR_SW_PLL;    
-//    /* Wait till PLL is used as system clock source */
-//    while ((RCC->CFGR & (uint32_t)RCC_CFGR_SWS) != (uint32_t)0x08){}
-//  }
-//  else
-//  { /* If HSE fails to start-up, the application will have wrong clock 
-//    configuration. User can add here some code to deal with this error */
-//  }
-//                           
-//}
+//外部变量
+extern BLE_STATUS bleStatus;
+extern SYSTEMSTRUCT SysParam;
+extern SYSTEM_CTRL_FLAG sysCtrlFlag;
+extern SNAKE_PARAM  Snake_Param;
+extern ds_set_time_t ds_set_time;
+extern ds_set_time_t ds_alm_time; 
+extern U8 DS1302_time[];
+
 
 // *****************************************************************************
 // 函数名称：RCC_Configuration
@@ -486,8 +429,8 @@ void OLED_Start_Mov(void)
 	U8 i = 0;
 	//清屏
   OLED_Clear();
-	OLED_ShowString(0,2,(U8 *)"  AUTO USB V1.0  ",16);	
-  OLED_ShowString(0,4,(U8 *)"   Zero Studio   ",16);	
+	OLED_ShowString(0,2,(U8 *)"  AUTO USB V1.0  ",16,16);	
+  OLED_ShowString(0,4,(U8 *)"   Zero Studio   ",16,16);	
 
   for(i = 0;i<15;i++)
 	{
@@ -562,49 +505,50 @@ void OLED_Display(void)
 
 		if(SysParam.SysMode == MODE_NORMALLY)//一般模式显示
 		{		
-			dailyStr[3] = ((DS1302_time[DS_TIME_YEAR]+2000)/1000)+48;
-			dailyStr[4] = ((DS1302_time[DS_TIME_YEAR]+2000)/100%10)+48;
-			dailyStr[5] = (((DS1302_time[DS_TIME_YEAR]+2000)/10)%10)+48;
-			dailyStr[6] = ((DS1302_time[DS_TIME_YEAR]+2000)%10)+48;
-			dailyStr[7] = '-';
-			dailyStr[8] = (DS1302_time[DS_TIME_MON]/10)+48;
-			dailyStr[9] = (DS1302_time[DS_TIME_MON]%10)+48;
-			dailyStr[10] = '-';
-			dailyStr[11] = (DS1302_time[DS_TIME_DAY]/10)+48;
-			dailyStr[12] = (DS1302_time[DS_TIME_DAY]%10)+48;
+			ole_str.oled_str_daily[3] = ((DS1302_time[DS_TIME_YEAR]+2000)/1000)+48;
+			ole_str.oled_str_daily[4] = ((DS1302_time[DS_TIME_YEAR]+2000)/100%10)+48;
+			ole_str.oled_str_daily[5] = (((DS1302_time[DS_TIME_YEAR]+2000)/10)%10)+48;
+			ole_str.oled_str_daily[6] = ((DS1302_time[DS_TIME_YEAR]+2000)%10)+48;
+			ole_str.oled_str_daily[7] = '-';
+			ole_str.oled_str_daily[8] = (DS1302_time[DS_TIME_MON]/10)+48;
+			ole_str.oled_str_daily[9] = (DS1302_time[DS_TIME_MON]%10)+48;
+			ole_str.oled_str_daily[10] = '-';
+			ole_str.oled_str_daily[11] = (DS1302_time[DS_TIME_DAY]/10)+48;
+			ole_str.oled_str_daily[12] = (DS1302_time[DS_TIME_DAY]%10)+48;
 			
-			timeStr[4] = (DS1302_time[DS_TIME_HOUR]/10)+48;
-			timeStr[5] = (DS1302_time[DS_TIME_HOUR]%10)+48;
-			timeStr[6] = ':';
-			timeStr[7] = (DS1302_time[DS_TIME_MIN]/10)+48;
-			timeStr[8] = (DS1302_time[DS_TIME_MIN]%10)+48;
-			timeStr[9] = ':';
-			timeStr[10] = (DS1302_time[DS_TIME_SEC]/10)+48;
-			timeStr[11] = (DS1302_time[DS_TIME_SEC]%10)+48;
+			ole_str.oled_str_time[4] = (DS1302_time[DS_TIME_HOUR]/10)+48;
+			ole_str.oled_str_time[5] = (DS1302_time[DS_TIME_HOUR]%10)+48;
+			ole_str.oled_str_time[6] = ':';
+			ole_str.oled_str_time[7] = (DS1302_time[DS_TIME_MIN]/10)+48;
+			ole_str.oled_str_time[8] = (DS1302_time[DS_TIME_MIN]%10)+48;
+			ole_str.oled_str_time[9] = ':';
+			ole_str.oled_str_time[10] = (DS1302_time[DS_TIME_SEC]/10)+48;
+			ole_str.oled_str_time[11] = (DS1302_time[DS_TIME_SEC]%10)+48;
 			
-			staBar[0]='R';
-			staBar[2]='0';
-			staBar[3]=READ_POWER_PIN+48;
+
 			
-			staBar[7] = 'G';
-			staBar[8] = 'E';
-			staBar[9] = 'N';
-			staBar[10] = ' ';
+			ole_str.oled_str_sbar[0]='R';
+			ole_str.oled_str_sbar[2]='0';
+			ole_str.oled_str_sbar[3]=READ_POWER_PIN+48;
 			
-			staBar[12] = 'B';		
+			ole_str.oled_str_sbar[7] = 'G';
+			ole_str.oled_str_sbar[8] = 'E';
+			ole_str.oled_str_sbar[9] = 'N';
+			ole_str.oled_str_sbar[10] = ' ';
+			
+			ole_str.oled_str_sbar[12] = 'B';		
 			if(bleStatus.heartCnt>4)
 			{
-				staBar[14] = 'N';
-				staBar[15] = 'C';
+				ole_str.oled_str_sbar[14] = 'N';
+				ole_str.oled_str_sbar[15] = 'C';
 				LED2_OFF;
 				bleStatus.rx_cnt = 0;
 			}
 			else 
 			{
-				staBar[14] = 'L';
-				staBar[15] = 'E';
-			}
-			
+				ole_str.oled_str_sbar[14] = 'L';
+				ole_str.oled_str_sbar[15] = 'E';
+			}						
 			sup_fg = 1;
 		}
 		else if(SysParam.SysMode == MODE_TIMESET)//时间设置模式
@@ -613,39 +557,39 @@ void OLED_Display(void)
 			if(cnt>20)cnt = 0;
 			if(cnt<10)
 			{
-				dailyStr[3] = ((SetTime[DS_TIME_YEAR]+2000)/1000)+48;
-				dailyStr[4] = ((SetTime[DS_TIME_YEAR]+2000)/100%10)+48;
-				dailyStr[5] = (((SetTime[DS_TIME_YEAR]+2000)/10)%10)+48;
-				dailyStr[6] = ((SetTime[DS_TIME_YEAR]+2000)%10)+48;
-				dailyStr[7] = '-';
-				dailyStr[8] = (SetTime[DS_TIME_MON]/10)+48;
-				dailyStr[9] = (SetTime[DS_TIME_MON]%10)+48;
-				dailyStr[10] = '-';
-				dailyStr[11] = (SetTime[DS_TIME_DAY]/10)+48;
-				dailyStr[12] = (SetTime[DS_TIME_DAY]%10)+48;
+				ole_str.oled_str_daily[3] = ((ds_set_time.Year)/1000)+48;
+				ole_str.oled_str_daily[4] = ((ds_set_time.Year)/100%10)+48;
+				ole_str.oled_str_daily[5] = (((ds_set_time.Year)/10)%10)+48;
+				ole_str.oled_str_daily[6] = ((ds_set_time.Year)%10)+48;
+				ole_str.oled_str_daily[7] = '-';
+				ole_str.oled_str_daily[8] = (ds_set_time.ds_time[DS_TIME_MON]/10)+48;
+				ole_str.oled_str_daily[9] = (ds_set_time.ds_time[DS_TIME_MON]%10)+48;
+				ole_str.oled_str_daily[10] = '-';
+				ole_str.oled_str_daily[11] = (ds_set_time.ds_time[DS_TIME_DAY]/10)+48;
+				ole_str.oled_str_daily[12] = (ds_set_time.ds_time[DS_TIME_DAY]%10)+48;
 				
-				timeStr[4] = (SetTime[DS_TIME_HOUR]/10)+48;
-				timeStr[5] = (SetTime[DS_TIME_HOUR]%10)+48;
-				timeStr[6] = ':';
-				timeStr[7] = (SetTime[DS_TIME_MIN]/10)+48;
-				timeStr[8] = (SetTime[DS_TIME_MIN]%10)+48;
-				timeStr[9] = ':';
-				timeStr[10] = (SetTime[DS_TIME_SEC]/10)+48;
-				timeStr[11] = (SetTime[DS_TIME_SEC]%10)+48;
+				ole_str.oled_str_time[4] = (ds_set_time.ds_time[DS_TIME_HOUR]/10)+48;
+				ole_str.oled_str_time[5] = (ds_set_time.ds_time[DS_TIME_HOUR]%10)+48;
+				ole_str.oled_str_time[6] = ':';
+				ole_str.oled_str_time[7] = (ds_set_time.ds_time[DS_TIME_MIN]/10)+48;
+				ole_str.oled_str_time[8] = (ds_set_time.ds_time[DS_TIME_MIN]%10)+48;
+				ole_str.oled_str_time[9] = ':';
+				ole_str.oled_str_time[10] = (ds_set_time.ds_time[DS_TIME_SEC]/10)+48;
+				ole_str.oled_str_time[11] = (ds_set_time.ds_time[DS_TIME_SEC]%10)+48;
 				
-				staBar[7] = 'S';
-				staBar[8] = 'E';
-				staBar[9] = 'T';
-				staBar[10] = ' ';
+				ole_str.oled_str_sbar[7] = 'S';
+				ole_str.oled_str_sbar[8] = 'E';
+				ole_str.oled_str_sbar[9] = 'T';
+				ole_str.oled_str_sbar[10] = ' ';
 			}
 			else
 			{
-				if(sysCtrlFlag.tim_SetCnt==TIME_SET_ID_HOUR)      timeStr[5] = '_';				
-				else if(sysCtrlFlag.tim_SetCnt==TIME_SET_ID_MIN) timeStr[8] = '_';				
-				else if(sysCtrlFlag.tim_SetCnt==TIME_SET_ID_SEC) timeStr[11] = '_';				
-				else if(sysCtrlFlag.tim_SetCnt==TIME_SET_ID_YEAR) dailyStr[6] = '_';				
-				else if(sysCtrlFlag.tim_SetCnt==TIME_SET_ID_MON) dailyStr[9] = '_';
-				else if(sysCtrlFlag.tim_SetCnt==TIME_SET_ID_DAY) dailyStr[12] = '_';				
+				if(sysCtrlFlag.tim_SetCnt==TIME_SET_ID_HOUR)     ole_str.oled_str_time[5] = '_';				
+				else if(sysCtrlFlag.tim_SetCnt==TIME_SET_ID_MIN) ole_str.oled_str_time[8] = '_';				
+				else if(sysCtrlFlag.tim_SetCnt==TIME_SET_ID_SEC) ole_str.oled_str_time[11] = '_';				
+				else if(sysCtrlFlag.tim_SetCnt==TIME_SET_ID_YEAR) ole_str.oled_str_daily[6] = '_';				
+				else if(sysCtrlFlag.tim_SetCnt==TIME_SET_ID_MON) ole_str.oled_str_daily[9] = '_';
+				else if(sysCtrlFlag.tim_SetCnt==TIME_SET_ID_DAY) ole_str.oled_str_daily[12] = '_';				
 				else{;}				
 			}
 			
@@ -657,39 +601,39 @@ void OLED_Display(void)
 			if(cnt>20)cnt = 0;
 			if(cnt<10)
 			{
-				dailyStr[3] = ((AlmTime[DS_TIME_YEAR]+2000)/1000)+48;
-				dailyStr[4] = ((AlmTime[DS_TIME_YEAR]+2000)/100%10)+48;
-				dailyStr[5] = (((AlmTime[DS_TIME_YEAR]+2000)/10)%10)+48;
-				dailyStr[6] = ((AlmTime[DS_TIME_YEAR]+2000)%10)+48;
-				dailyStr[7] = '-';
-				dailyStr[8] = (AlmTime[DS_TIME_MON]/10)+48;
-				dailyStr[9] = (AlmTime[DS_TIME_MON]%10)+48;
-				dailyStr[10] = '-';
-				dailyStr[11] = (AlmTime[DS_TIME_DAY]/10)+48;
-				dailyStr[12] = (AlmTime[DS_TIME_DAY]%10)+48;
+				ole_str.oled_str_daily[3] = ((ds_alm_time.ds_time[DS_TIME_YEAR]+2000)/1000)+48;
+				ole_str.oled_str_daily[4] = ((ds_alm_time.ds_time[DS_TIME_YEAR]+2000)/100%10)+48;
+				ole_str.oled_str_daily[5] = (((ds_alm_time.ds_time[DS_TIME_YEAR]+2000)/10)%10)+48;
+				ole_str.oled_str_daily[6] = ((ds_alm_time.ds_time[DS_TIME_YEAR]+2000)%10)+48;
+				ole_str.oled_str_daily[7] = '-';
+				ole_str.oled_str_daily[8] = (ds_alm_time.ds_time[DS_TIME_MON]/10)+48;
+				ole_str.oled_str_daily[9] = (ds_alm_time.ds_time[DS_TIME_MON]%10)+48;
+				ole_str.oled_str_daily[10] = '-';
+				ole_str.oled_str_daily[11] = (ds_alm_time.ds_time[DS_TIME_DAY]/10)+48;
+				ole_str.oled_str_daily[12] = (ds_alm_time.ds_time[DS_TIME_DAY]%10)+48;
 				
-				timeStr[4] = (AlmTime[DS_TIME_HOUR]/10)+48;
-				timeStr[5] = (AlmTime[DS_TIME_HOUR]%10)+48;
-				timeStr[6] = ':';
-				timeStr[7] = (AlmTime[DS_TIME_MIN]/10)+48;
-				timeStr[8] = (AlmTime[DS_TIME_MIN]%10)+48;
-				timeStr[9] = ':';
-				timeStr[10] = (AlmTime[DS_TIME_SEC]/10)+48;
-				timeStr[11] = (AlmTime[DS_TIME_SEC]%10)+48;
+				ole_str.oled_str_time[4] = (ds_alm_time.ds_time[DS_TIME_HOUR]/10)+48;
+				ole_str.oled_str_time[5] = (ds_alm_time.ds_time[DS_TIME_HOUR]%10)+48;
+				ole_str.oled_str_time[6] = ':';
+				ole_str.oled_str_time[7] = (ds_alm_time.ds_time[DS_TIME_MIN]/10)+48;
+				ole_str.oled_str_time[8] = (ds_alm_time.ds_time[DS_TIME_MIN]%10)+48;
+				ole_str.oled_str_time[9] = ':';
+				ole_str.oled_str_time[10] = (ds_alm_time.ds_time[DS_TIME_SEC]/10)+48;
+				ole_str.oled_str_time[11] = (ds_alm_time.ds_time[DS_TIME_SEC]%10)+48;
 				
-				staBar[7] = 'A';
-				staBar[8] = 'L';
-				staBar[9] = 'M';
-				staBar[10] = ' ';
+				ole_str.oled_str_sbar[7] = 'A';
+				ole_str.oled_str_sbar[8] = 'L';
+				ole_str.oled_str_sbar[9] = 'M';
+				ole_str.oled_str_sbar[10] = ' ';
 			}
 			else
 			{			
-					if(sysCtrlFlag.tim_SetCnt==TIME_SET_ID_HOUR)      timeStr[5] = '_';					
-					else if(sysCtrlFlag.tim_SetCnt==TIME_SET_ID_MIN) timeStr[8] = '_';				
-					else if(sysCtrlFlag.tim_SetCnt==TIME_SET_ID_SEC) timeStr[11] = '_';					
-					else if(sysCtrlFlag.tim_SetCnt==TIME_SET_ID_YEAR) dailyStr[6] = '_';					
-					else if(sysCtrlFlag.tim_SetCnt==TIME_SET_ID_MON) dailyStr[9] = '_';					
-					else if(sysCtrlFlag.tim_SetCnt==TIME_SET_ID_DAY) dailyStr[12] = '_';					
+					if(sysCtrlFlag.tim_SetCnt==TIME_SET_ID_HOUR)      ole_str.oled_str_time[5] = '_';					
+					else if(sysCtrlFlag.tim_SetCnt==TIME_SET_ID_MIN)  ole_str.oled_str_time[8] = '_';				
+					else if(sysCtrlFlag.tim_SetCnt==TIME_SET_ID_SEC)  ole_str.oled_str_time[11] = '_';					
+					else if(sysCtrlFlag.tim_SetCnt==TIME_SET_ID_YEAR) ole_str.oled_str_daily[6] = '_';					
+					else if(sysCtrlFlag.tim_SetCnt==TIME_SET_ID_MON)  ole_str.oled_str_daily[9] = '_';					
+					else if(sysCtrlFlag.tim_SetCnt==TIME_SET_ID_DAY)  ole_str.oled_str_daily[12] = '_';					
 					else{;}	
 			}
 			
@@ -697,25 +641,25 @@ void OLED_Display(void)
 		}
 		else if(SysParam.SysMode == MODE_SECLECT)//选择模式
 		{
-			dailyStr[3] = ((DS1302_time[DS_TIME_YEAR]+2000)/1000)+48;
-			dailyStr[4] = ((DS1302_time[DS_TIME_YEAR]+2000)/100%10)+48;
-			dailyStr[5] = (((DS1302_time[DS_TIME_YEAR]+2000)/10)%10)+48;
-			dailyStr[6] = ((DS1302_time[DS_TIME_YEAR]+2000)%10)+48;
-			dailyStr[7] = '-';
-			dailyStr[8] = (DS1302_time[DS_TIME_MON]/10)+48;
-			dailyStr[9] = (DS1302_time[DS_TIME_MON]%10)+48;
-			dailyStr[10] = '-';
-			dailyStr[11] = (DS1302_time[DS_TIME_DAY]/10)+48;
-			dailyStr[12] = (DS1302_time[DS_TIME_DAY]%10)+48;
+			ole_str.oled_str_daily[3] = ((DS1302_time[DS_TIME_YEAR]+2000)/1000)+48;
+			ole_str.oled_str_daily[4] = ((DS1302_time[DS_TIME_YEAR]+2000)/100%10)+48;
+			ole_str.oled_str_daily[5] = (((DS1302_time[DS_TIME_YEAR]+2000)/10)%10)+48;
+			ole_str.oled_str_daily[6] = ((DS1302_time[DS_TIME_YEAR]+2000)%10)+48;
+			ole_str.oled_str_daily[7] = '-';
+			ole_str.oled_str_daily[8] = (DS1302_time[DS_TIME_MON]/10)+48;
+			ole_str.oled_str_daily[9] = (DS1302_time[DS_TIME_MON]%10)+48;
+			ole_str.oled_str_daily[10] = '-';
+			ole_str.oled_str_daily[11] = (DS1302_time[DS_TIME_DAY]/10)+48;
+			ole_str.oled_str_daily[12] = (DS1302_time[DS_TIME_DAY]%10)+48;
 			
-			timeStr[4] = (DS1302_time[DS_TIME_HOUR]/10)+48;
-			timeStr[5] = (DS1302_time[DS_TIME_HOUR]%10)+48;
-			timeStr[6] = ':';
-			timeStr[7] = (DS1302_time[DS_TIME_MIN]/10)+48;
-			timeStr[8] = (DS1302_time[DS_TIME_MIN]%10)+48;
-			timeStr[9] = ':';
-			timeStr[10] = (DS1302_time[DS_TIME_SEC]/10)+48;
-			timeStr[11] = (DS1302_time[DS_TIME_SEC]%10)+48;		
+			ole_str.oled_str_time[4] = (DS1302_time[DS_TIME_HOUR]/10)+48;
+			ole_str.oled_str_time[5] = (DS1302_time[DS_TIME_HOUR]%10)+48;
+			ole_str.oled_str_time[6] = ':';
+			ole_str.oled_str_time[7] = (DS1302_time[DS_TIME_MIN]/10)+48;
+			ole_str.oled_str_time[8] = (DS1302_time[DS_TIME_MIN]%10)+48;
+			ole_str.oled_str_time[9] = ':';
+			ole_str.oled_str_time[10] = (DS1302_time[DS_TIME_SEC]/10)+48;
+			ole_str.oled_str_time[11] = (DS1302_time[DS_TIME_SEC]%10)+48;		
 			
 			sup_fg = 1;
 		}
@@ -724,92 +668,77 @@ void OLED_Display(void)
       cpu_vol = adc_func[ADC_FUNC_ITEM_VOT]()*1000;				
 		  cpu_temp = adc_func[ADC_FUNC_ITEM_TEMP]()*100;       
 			
-			dailyStr[3] = 'R';
-			dailyStr[4] = 'E';
-			dailyStr[5] = 'F';
-			dailyStr[6] = ':';
-			dailyStr[7] = (((U32)cpu_vol)/1000)+48;
-			dailyStr[8] = '.';
-			dailyStr[9] = (((U32)cpu_vol)/100%10)+48;
-			dailyStr[10] = (((U32)cpu_vol)/10%10)+48;
-			dailyStr[11] = (((U32)cpu_vol)%10)+48;
-			dailyStr[12] = 'V';
+			ole_str.oled_str_daily[3] = 'R';
+			ole_str.oled_str_daily[4] = 'E';
+			ole_str.oled_str_daily[5] = 'F';
+			ole_str.oled_str_daily[6] = ':';
+			ole_str.oled_str_daily[7] = (((U32)cpu_vol)/1000)+48;
+			ole_str.oled_str_daily[8] = '.';
+			ole_str.oled_str_daily[9] = (((U32)cpu_vol)/100%10)+48;
+			ole_str.oled_str_daily[10] = (((U32)cpu_vol)/10%10)+48;
+			ole_str.oled_str_daily[11] = (((U32)cpu_vol)%10)+48;
+			ole_str.oled_str_daily[12] = 'V';
 			
-			timeStr[4] = 'T';
-			timeStr[5] = ':';
-			timeStr[6] = (((U32)cpu_temp)/1000)+48;
-			timeStr[7] = (((U32)cpu_temp)/100%10)+48;
-			timeStr[8] = '.';
-			timeStr[9] = (((U32)cpu_temp)/10%10)+48;
-			timeStr[10] = (((U32)cpu_temp)%10)+48;
-			timeStr[11] = 'C';
+			ole_str.oled_str_time[4] = 'T';
+			ole_str.oled_str_time[5] = ':';
+			ole_str.oled_str_time[6] = (((U32)cpu_temp)/1000)+48;
+			ole_str.oled_str_time[7] = (((U32)cpu_temp)/100%10)+48;
+			ole_str.oled_str_time[8] = '.';
+			ole_str.oled_str_time[9] = (((U32)cpu_temp)/10%10)+48;
+			ole_str.oled_str_time[10] = (((U32)cpu_temp)%10)+48;
+			ole_str.oled_str_time[11] = 'C';
 			
-	    staBar[7] = 'C';
-			staBar[8] = 'P';
-			staBar[9] = 'U';
-			staBar[10] = ' ';
+	    ole_str.oled_str_sbar[7] = 'C';
+			ole_str.oled_str_sbar[8] = 'P';
+			ole_str.oled_str_sbar[9] = 'U';
+			ole_str.oled_str_sbar[10] = ' ';
 
       sup_fg = 1;			
 		}
 		else if(SysParam.SysMode == MODE_TEMP)//室温检测
-		{			
-			dailyStr[0] = 'R';
-			dailyStr[1] = 'o';
-			dailyStr[2] = 'o';
-			dailyStr[3] = 'm';
-			dailyStr[4] = ' ';
-			dailyStr[5] = 'T';
-			dailyStr[6] = 'e';
-			dailyStr[7] = 'm';
-			dailyStr[8] = 'p';
-			dailyStr[9] = 'e';
-			dailyStr[10] = 'r';
-			dailyStr[11] = 'a';
-			dailyStr[12] = 't';
-			dailyStr[13] = 'u';
-			dailyStr[14] = 'r';
-			dailyStr[15] = 'e';
+		{		
+      strcpy((char *)ole_str.oled_str_daily,"Room Temperature");			
 			
-			timeStr[4] = 'T';
-			timeStr[5] = ':';
-			if(dsbDat<0)timeStr[6]='-';
-			else        timeStr[6]=' ';
-			timeStr[7] = (((U32)dsbDat)/100%10)+48;
-			timeStr[8] = (((U32)dsbDat)/10%10)+48;
-			timeStr[9] = '.';
-			timeStr[10] = (((U32)dsbDat)%10)+48;
-			timeStr[11] = 'C';
+			ole_str.oled_str_time[4] = 'T';
+			ole_str.oled_str_time[5] = ':';
+			if(dsbDat<0)ole_str.oled_str_time[6]='-';
+			else        ole_str.oled_str_time[6]=' ';
+			ole_str.oled_str_time[7] = (((U32)dsbDat)/100%10)+48;
+			ole_str.oled_str_time[8] = (((U32)dsbDat)/10%10)+48;
+			ole_str.oled_str_time[9] = '.';
+			ole_str.oled_str_time[10] = (((U32)dsbDat)%10)+48;
+			ole_str.oled_str_time[11] = 'C';
 			
-	    staBar[7] = 'T';
-			staBar[8] = 'E';
-			staBar[9] = 'M';
-			staBar[10] = 'P';
+	    ole_str.oled_str_sbar[7] = 'T';
+			ole_str.oled_str_sbar[8] = 'E';
+			ole_str.oled_str_sbar[9] = 'M';
+			ole_str.oled_str_sbar[10] = 'P';
 
       sup_fg = 1;
 		}
 		else if(SysParam.SysMode == MODE_GAME)//游戏模式
 		{
-			staBar[0] = 'V';
-			staBar[2] = (Snake_Param.Snake_Speed/10)+48;
-			staBar[3] = (Snake_Param.Snake_Speed%10)+48; 
+			ole_str.oled_str_sbar[0] = 'V';
+			ole_str.oled_str_sbar[2] = (Snake_Param.Snake_Speed/10)+48;
+			ole_str.oled_str_sbar[3] = (Snake_Param.Snake_Speed%10)+48; 
 			
-			staBar[7] = 'G';
-			staBar[8] = 'A';
-			staBar[9] = 'M';
-			staBar[10] = 'E';
+			ole_str.oled_str_sbar[7] = 'G';
+			ole_str.oled_str_sbar[8] = 'A';
+			ole_str.oled_str_sbar[9] = 'M';
+			ole_str.oled_str_sbar[10] = 'E';
 			
-			staBar[12] = 'S';
-			staBar[14] = (Snake_Param.Game_Score/10)+48;
-			staBar[15] = (Snake_Param.Game_Score%10)+48;
+			ole_str.oled_str_sbar[12] = 'S';
+			ole_str.oled_str_sbar[14] = (Snake_Param.Game_Score/10)+48;
+			ole_str.oled_str_sbar[15] = (Snake_Param.Game_Score%10)+48;
 			
 			sup_fg = 1;	
 		}
 		else if(SysParam.SysMode == MODE_LOWP)//低功耗模式
 		{
-			staBar[7] = 'L';
-			staBar[8] = 'O';
-			staBar[9] = 'W';
-			staBar[10] = 'P';
+			ole_str.oled_str_sbar[7] = 'L';
+			ole_str.oled_str_sbar[8] = 'O';
+			ole_str.oled_str_sbar[9] = 'W';
+			ole_str.oled_str_sbar[10] = 'P';
 		}
 		else if(SysParam.SysMode == MODE_BTVE || SysParam.SysMode == MODE_BTAD)sup_fg = 1;	
 		else{;}				
@@ -819,15 +748,15 @@ void OLED_Display(void)
 			//显示时间日期
 			if(SysParam.SysMode != MODE_GAME)
 			{
-			   OLED_ShowString(0,2,timeStr,16);
-			   OLED_ShowString(0,5,dailyStr,4);
+			   OLED_ShowString(0,2,ole_str.oled_str_time,16,sizeof(ole_str.oled_str_time));
+			   OLED_ShowString(0,5,ole_str.oled_str_daily,4,sizeof(ole_str.oled_str_daily));
 			}
 			else
 			{
-				//Update_Map();
+				//Update Map
 				update_func[UPDATE_FUNC_MAP]();
 			}
-			OLED_ShowString(0,7,staBar,4);	
+			OLED_ShowString(0,7,ole_str.oled_str_sbar,4,sizeof(ole_str.oled_str_sbar));	
 			sup_fg = 0;				
 		}
 	}
@@ -857,6 +786,5 @@ void OLED_Display(void)
 	}
 	
 	//定时更新时间
-	//Upload_RtcTime();
 	update_func[UPDATE_FUNC_RTCTIME]();
 }

@@ -29,6 +29,7 @@
 .\game.o: ..\lib\inc\stm32f0xx_wwdg.h
 .\game.o: ..\lib\inc\stm32f0xx_misc.h
 .\game.o: ..\lib\inc\stm32f0xx_adc.h
+.\game.o: E:\StudySoftware\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
 .\game.o: ..\drive\mydefine.h
 .\game.o: ..\drive\user.h
 .\game.o: ..\drive\delay.h

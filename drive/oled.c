@@ -284,14 +284,18 @@ void OLED_ShowNum(U8 x,U8 y,U32 num,U8 len,U8 size2)
 	}
 } 
 //显示一个字符号串
-void OLED_ShowString(U8 x,U8 y,U8 *chr,U8 Char_Size)
+void OLED_ShowString(U8 x,U8 y,U8 *chr,U8 Char_Size,U8 chr_len)
 {
 	unsigned char j=0;
-	while (chr[j]!='\0')
-	{		OLED_ShowChar(x,y,chr[j],Char_Size);
-			x+=8;
-		if(x>120){x=0;y+=2;}
-			j++;
+	for(j = 0;j<chr_len;j++)
+	{
+		OLED_ShowChar(x,y,chr[j],Char_Size);
+		x+=8;
+		if(x>120)
+    {
+		  x=0;
+		  y+=2;
+		}		
 	}
 }
 //显示汉字

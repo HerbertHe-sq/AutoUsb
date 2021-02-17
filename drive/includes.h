@@ -10,6 +10,7 @@
 
 #include "stm32f0xx.h"
 #include "stm32f0xx_adc.h"
+#include "string.h"
 
 //#include "sys.h"
 #include "mydefine.h"
@@ -63,12 +64,21 @@ typedef struct{
 	U8 sLedFlag;    //蜂鸣器标志位  
   U8 tim_SetCnt;  //选择设置标志位
   U8 usb_SwFg;	  //USB开关标志位
+	U8 screenFlag;  //屏幕开关标志位
   U16 pwFlag;     //电量进度条
 	U16 timSFlag;   //刷屏时间
 	U16 timLedFlag; //呼吸灯
 	U16 adcFlag;    //ADC转换标志位
 }SYSTEM_CTRL_FLAG;
 
+typedef struct{
+	U8 oled_str_time[16];   //时间栏
+	U8 oled_str_daily[16];  //日期栏
+	U8 oled_str_sbar[16];   //状态栏
+}OLED_STR_T;
+
+
+extern OLED_STR_T ole_str;
 
 #endif
 

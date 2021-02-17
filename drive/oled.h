@@ -59,7 +59,7 @@ void OLED_DrawPoint(U8 x,U8 y,U8 t);
 void OLED_Fill(U8 x1,U8 y1,U8 x2,U8 y2,U8 dot);
 void OLED_ShowChar(U8 x,U8 y,U8 chr,U8 Char_Size);
 void OLED_ShowNum(U8 x,U8 y,U32 num,U8 len,U8 size);
-void OLED_ShowString(U8 x,U8 y, U8 *p,U8 Char_Size);	 
+void OLED_ShowString(U8 x,U8 y, U8 *p,U8 Char_Size,U8 chr_len);	 
 void OLED_Set_Pos(unsigned char x, unsigned char y);
 void OLED_ShowCHinese(U8 x,U8 y,U8 no);
 void OLED_DrawBMP(unsigned char x0, unsigned char y0,unsigned char x1, unsigned char y1,unsigned char BMP[]);

@@ -87,11 +87,11 @@ U8 DSB_Init(void)
 // *****************************************************************************
 void DSB_Reset(void)
 {
-	DSB_IO_OUT(); //SET PA0 OUTPUT
-	DSB_SetIO(0); //拉低DQ
-	Delay_1us(750);    //拉低750us
-	DSB_SetIO(1); //DQ=1 
-	Delay_1us(15);     //15US
+	DSB_IO_OUT();       //SET PA0 OUTPUT
+	DSB_SetIO(0);       //拉低DQ
+	Delay_1us(750);     //拉低750us
+	DSB_SetIO(1);       //DQ=1 
+	Delay_1us(15);      //15US
 }
 
 // *****************************************************************************

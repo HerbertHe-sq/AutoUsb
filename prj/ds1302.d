@@ -29,6 +29,7 @@
 .\ds1302.o: ..\lib\inc\stm32f0xx_wwdg.h
 .\ds1302.o: ..\lib\inc\stm32f0xx_misc.h
 .\ds1302.o: ..\lib\inc\stm32f0xx_adc.h
+.\ds1302.o: E:\StudySoftware\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
 .\ds1302.o: ..\drive\mydefine.h
 .\ds1302.o: ..\drive\user.h
 .\ds1302.o: ..\drive\delay.h

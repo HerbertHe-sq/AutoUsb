@@ -29,6 +29,7 @@
 .\ds18b20.o: ..\lib\inc\stm32f0xx_wwdg.h
 .\ds18b20.o: ..\lib\inc\stm32f0xx_misc.h
 .\ds18b20.o: ..\lib\inc\stm32f0xx_adc.h
+.\ds18b20.o: E:\StudySoftware\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
 .\ds18b20.o: ..\drive\mydefine.h
 .\ds18b20.o: ..\drive\user.h
 .\ds18b20.o: ..\drive\delay.h

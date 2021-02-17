@@ -29,6 +29,7 @@
 .\oled.o: ..\lib\inc\stm32f0xx_wwdg.h
 .\oled.o: ..\lib\inc\stm32f0xx_misc.h
 .\oled.o: ..\lib\inc\stm32f0xx_adc.h
+.\oled.o: E:\StudySoftware\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
 .\oled.o: ..\drive\mydefine.h
 .\oled.o: ..\drive\user.h
 .\oled.o: ..\drive\delay.h

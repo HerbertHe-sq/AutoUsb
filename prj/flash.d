@@ -29,6 +29,7 @@
 .\flash.o: ..\lib\inc\stm32f0xx_wwdg.h
 .\flash.o: ..\lib\inc\stm32f0xx_misc.h
 .\flash.o: ..\lib\inc\stm32f0xx_adc.h
+.\flash.o: E:\StudySoftware\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
 .\flash.o: ..\drive\mydefine.h
 .\flash.o: ..\drive\user.h
 .\flash.o: ..\drive\delay.h

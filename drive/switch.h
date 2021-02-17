@@ -12,7 +12,8 @@ typedef enum{
 	KEY_FUNC_ENTER,
 	KEY_FUNC_RIGHT,
 	KEY_FUNC_DOWN,
-	KEY_FUNC_CANCEL
+	KEY_FUNC_CANCEL,
+	KEY_FUNC_ITEM_NUM
 }key_func_id_t;
 
 typedef enum{
@@ -23,7 +24,10 @@ typedef enum{
 typedef struct{
 	U8 mode_Fg;
 	U8 sel_Fg;//模式标志位
-}SEITCH_FLAG;
+}select_flag_t;
+
+typedef void(*key_func_cbk)(void);
+typedef void(*key_func_game_t)(U8);
 
 void SW_Delay(U8 de_Count);
 U8 Switch_Scan(void);

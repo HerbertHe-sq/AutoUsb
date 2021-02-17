@@ -1,21 +1,30 @@
 #include "includes.h"
 
 //内部变量
-U8 data[DEVICE_DATA_LEN]={0x00,0x00,0x00,0x00};
+//U8 data[DEVICE_DATA_LEN]={0x00,0x00,0x00,0x00};
 U8 SW_BTScanDat[SW_SEL_LINE]; //存储扫描数据
 U8 BtnState[SW_SUM];          //按键状态表
 U8 SW_Sel_Table[SW_SEL_LINE] = {0x0E,0x0D,0x0B};//选线表
-U8 SetTime[8],AlmTime[8];
-U8 dis_cnt = 0;//关闭屏幕
 const U8 mon_table[12]={31,28,31,30,31,30,31,31,30,31,30,31};	       //12个月份的天数
 
-SEITCH_FLAG sw_flag={1,0};
+ds_set_time_t ds_set_time={0U,{0U}};
+ds_set_time_t ds_alm_time={0U,{0U}};
+select_flag_t sw_flag={1,0};
 
+key_func_game_t key_game_cbk = Key_Down_Move;   //游戏按钮
+key_func_cbk Key_Funcbk[KEY_FUNC_ITEM_NUM] = {
+	Key_LeftEvt, 
+  Key_UpEvt,
+	Key_EnterEvt, 
+  Key_RightEvt,
+  Key_DownEvt,
+  Key_CacelEvt
+};
 
 //外部变量
 extern SYSTEM_CTRL_FLAG sysCtrlFlag;
 extern SYSTEMSTRUCT SysParam;
-extern U8 staBar[],dailyStr[],timeStr[];
+extern OLED_STR_T ole_str;
 extern U8 DS1302_time[];
 
 /* ********************************************************************************************************
@@ -132,18 +141,11 @@ void Key_Process(U8 key_id)
 {
 	if(BtnState[key_id]!=0)
 	{
-		sysCtrlFlag.beepFlag = 100;
-		
-		switch(key_id)
+		sysCtrlFlag.beepFlag = 100;		
+		if(key_id<KEY_FUNC_ITEM_NUM)
 		{
-      case KEY_FUNC_LEFT:Key_LeftEvt(); break;
-			case KEY_FUNC_UP:Key_UpEvt(); break;
-			case KEY_FUNC_ENTER:Key_EnterEvt();break;
-			case KEY_FUNC_RIGHT:Key_RightEvt();break;
-			case KEY_FUNC_DOWN:Key_DownEvt(); break;
-			case KEY_FUNC_CANCEL:Key_CacelEvt();break;	
-			default:break;			
-		}		
+			Key_Funcbk[key_id]();
+		}	
 	}
 }
 
@@ -165,64 +167,65 @@ void Key_DownEvt(void)
 		switch(sw_flag.mode_Fg)
 		{
 			case MODE_ID_GEN:
-				staBar[7] = 'G';
-				staBar[8] = 'E';
-				staBar[9] = 'N';
-				staBar[10] = ' ';
+				//strcpy((char*)&ole_str.oled_str_sbar[7],"GEN ");
+				ole_str.oled_str_sbar[7] = 'G';
+				ole_str.oled_str_sbar[8] = 'E';
+				ole_str.oled_str_sbar[9] = 'N';
+				ole_str.oled_str_sbar[10] = ' ';
 			  break;
 			case MODE_ID_TIMESET:
-				staBar[7] = 'S';
-				staBar[8] = 'E';
-				staBar[9] = 'T';
-				staBar[10] = ' ';				
+				ole_str.oled_str_sbar[7] = 'S';
+				ole_str.oled_str_sbar[8] = 'E';
+				ole_str.oled_str_sbar[9] = 'T';
+				ole_str.oled_str_sbar[10] = ' ';				
 			  break;
 			case MODE_ID_ALMSET:				
-				staBar[7] = 'A';
-				staBar[8] = 'L';
-				staBar[9] = 'M';
-				staBar[10] = ' ';
+				ole_str.oled_str_sbar[7] = 'A';
+				ole_str.oled_str_sbar[8] = 'L';
+				ole_str.oled_str_sbar[9] = 'M';
+				ole_str.oled_str_sbar[10] = ' ';
 			  break;
 			case MODE_ID_CPU:
-				staBar[7] = 'C';
-				staBar[8] = 'P';
-				staBar[9] = 'U';
-				staBar[10] = ' ';
+				ole_str.oled_str_sbar[7] = 'C';
+				ole_str.oled_str_sbar[8] = 'P';
+				ole_str.oled_str_sbar[9] = 'U';
+				ole_str.oled_str_sbar[10] = ' ';
 				break;
 			case MODE_ID_TEMP:
-				staBar[7] = 'T';
-				staBar[8] = 'E';
-				staBar[9] = 'M';
-				staBar[10] = 'P';
+				ole_str.oled_str_sbar[7] = 'T';
+				ole_str.oled_str_sbar[8] = 'E';
+				ole_str.oled_str_sbar[9] = 'M';
+				ole_str.oled_str_sbar[10] = 'P';
 				break;
 			case MODE_ID_GAME:
-			  staBar[7] = 'G';
-				staBar[8] = 'A';
-				staBar[9] = 'M';
-				staBar[10] = 'E';	
+			  ole_str.oled_str_sbar[7] = 'G';
+				ole_str.oled_str_sbar[8] = 'A';
+				ole_str.oled_str_sbar[9] = 'M';
+				ole_str.oled_str_sbar[10] = 'E';	
 			  break;
 			case MODE_ID_LOWP:
-				staBar[7] = 'L';
-				staBar[8] = 'O';
-				staBar[9] = 'W';
-				staBar[10] = 'P';
+				ole_str.oled_str_sbar[7] = 'L';
+				ole_str.oled_str_sbar[8] = 'O';
+				ole_str.oled_str_sbar[9] = 'W';
+				ole_str.oled_str_sbar[10] = 'P';
         break;			
 			case MODE_ID_BTRS:
-			  staBar[7] = 'B';
-				staBar[8] = 'T';
-				staBar[9] = 'R';
-				staBar[10] = 'S';		
+			  ole_str.oled_str_sbar[7] = 'B';
+				ole_str.oled_str_sbar[8] = 'T';
+				ole_str.oled_str_sbar[9] = 'R';
+				ole_str.oled_str_sbar[10] = 'S';		
 			  break;
       case MODE_ID_BTVE:
-			  staBar[7] = 'B';
-				staBar[8] = 'T';
-				staBar[9] = 'V';
-				staBar[10] = 'E';		
+			  ole_str.oled_str_sbar[7] = 'B';
+				ole_str.oled_str_sbar[8] = 'T';
+				ole_str.oled_str_sbar[9] = 'V';
+				ole_str.oled_str_sbar[10] = 'E';		
 			  break;
       case MODE_ID_BTAD:
-			  staBar[7] = 'B';
-				staBar[8] = 'T';
-				staBar[9] = 'A';
-				staBar[10] = 'D';		
+			  ole_str.oled_str_sbar[7] = 'B';
+				ole_str.oled_str_sbar[8] = 'T';
+				ole_str.oled_str_sbar[9] = 'A';
+				ole_str.oled_str_sbar[10] = 'D';		
 			  break;			
 		}
 	}
@@ -233,28 +236,28 @@ void Key_DownEvt(void)
 			switch(sysCtrlFlag.tim_SetCnt)
 			{
 				case TIME_SET_ID_HOUR:
-					SetTime[DS_TIME_HOUR]++;
-					if(SetTime[DS_TIME_HOUR]>23)SetTime[DS_TIME_HOUR] = 0;
+					ds_set_time.ds_time[DS_TIME_HOUR]++;
+					if(ds_set_time.ds_time[DS_TIME_HOUR]>23)ds_set_time.ds_time[DS_TIME_HOUR] = 0;
 					break;
 				case TIME_SET_ID_MIN:
-					SetTime[DS_TIME_MIN]++;
-					if(SetTime[DS_TIME_MIN]>59)SetTime[DS_TIME_MIN] = 0;
+					ds_set_time.ds_time[DS_TIME_MIN]++;
+					if(ds_set_time.ds_time[DS_TIME_MIN]>59)ds_set_time.ds_time[DS_TIME_MIN] = 0;
 					break;
 				case TIME_SET_ID_SEC:
-					SetTime[DS_TIME_SEC]++;
-					if(SetTime[DS_TIME_SEC]>59)SetTime[DS_TIME_SEC] = 0;
+					ds_set_time.ds_time[DS_TIME_SEC]++;
+					if(ds_set_time.ds_time[DS_TIME_SEC]>59)ds_set_time.ds_time[DS_TIME_SEC] = 0;
 					break;
 				case TIME_SET_ID_YEAR:
-					SetTime[DS_TIME_YEAR]++;
-					if(SetTime[DS_TIME_YEAR]>2099)SetTime[DS_TIME_YEAR] = 2099;
+					ds_set_time.Year++;
+					if(ds_set_time.Year>2099)ds_set_time.Year = 2099;
 					break;
 				case TIME_SET_ID_MON:
-					SetTime[DS_TIME_MON]++;
-					if(SetTime[DS_TIME_MON]>12)SetTime[DS_TIME_MON] = 1;
+					ds_set_time.ds_time[DS_TIME_MON]++;
+					if(ds_set_time.ds_time[DS_TIME_MON]>12)ds_set_time.ds_time[DS_TIME_MON] = 1;
 					break;
 				case TIME_SET_ID_DAY:
-					SetTime[DS_TIME_DAY]++;
-					if(SetTime[DS_TIME_DAY]>mon_table[SetTime[DS_TIME_MON]])SetTime[DS_TIME_DAY] = 1;
+					ds_set_time.ds_time[DS_TIME_DAY]++;
+					if(ds_set_time.ds_time[DS_TIME_DAY]>mon_table[ds_set_time.ds_time[DS_TIME_MON]])ds_set_time.ds_time[DS_TIME_DAY] = 1;
 					break;
 			}
 
@@ -264,34 +267,34 @@ void Key_DownEvt(void)
 			switch(sysCtrlFlag.tim_SetCnt)
 			{
 				case TIME_SET_ID_HOUR:
-					AlmTime[DS_TIME_HOUR]++;
-					if(AlmTime[DS_TIME_HOUR]>23)AlmTime[DS_TIME_HOUR] = 0;
+					ds_alm_time.ds_time[DS_TIME_HOUR]++;
+					if(ds_alm_time.ds_time[DS_TIME_HOUR]>23)ds_alm_time.ds_time[DS_TIME_HOUR] = 0;
 					break;
 				case TIME_SET_ID_MIN:
-					AlmTime[DS_TIME_MIN]++;
-					if(AlmTime[DS_TIME_MIN]>59)AlmTime[DS_TIME_MIN] = 0;
+					ds_alm_time.ds_time[DS_TIME_MIN]++;
+					if(ds_alm_time.ds_time[DS_TIME_MIN]>59)ds_alm_time.ds_time[DS_TIME_MIN] = 0;
 					break;
 				case TIME_SET_ID_SEC:
-					AlmTime[DS_TIME_SEC]++;
-					if(AlmTime[DS_TIME_SEC]>59)AlmTime[DS_TIME_SEC] = 0;
+					ds_alm_time.ds_time[DS_TIME_SEC]++;
+					if(ds_alm_time.ds_time[DS_TIME_SEC]>59)ds_alm_time.ds_time[DS_TIME_SEC] = 0;
 					break;
 				case TIME_SET_ID_YEAR:
-					AlmTime[DS_TIME_YEAR]++;
-					if(AlmTime[DS_TIME_YEAR]>2099)AlmTime[DS_TIME_YEAR] = 2099;
+					ds_alm_time.Year++;
+					if(ds_alm_time.Year>2099)ds_alm_time.Year = 2099;
 					break;
 				case TIME_SET_ID_MON:
-					AlmTime[DS_TIME_MON]++;
-					if(AlmTime[DS_TIME_MON]>12)AlmTime[DS_TIME_MON] = 1;
+					ds_alm_time.ds_time[DS_TIME_MON]++;
+					if(ds_alm_time.ds_time[DS_TIME_MON]>12)ds_alm_time.ds_time[DS_TIME_MON] = 1;
 					break;
 				case TIME_SET_ID_DAY:
-					AlmTime[DS_TIME_DAY]++;
-					if(AlmTime[DS_TIME_DAY]>mon_table[AlmTime[DS_TIME_MON]])AlmTime[DS_TIME_DAY] = 1;
+					ds_alm_time.ds_time[DS_TIME_DAY]++;
+					if(ds_alm_time.ds_time[DS_TIME_DAY]>mon_table[ds_alm_time.ds_time[DS_TIME_MON]])ds_alm_time.ds_time[DS_TIME_DAY] = 1;
 					break;
 			}
 		}
 		else if(SysParam.SysMode == MODE_GAME)
 		{
-			Key_Down_Move(2);  //Down-2
+			key_game_cbk(2);  //Down-2
 		}
 		else{
 		
@@ -317,64 +320,64 @@ void Key_UpEvt(void)
 		switch(sw_flag.mode_Fg)
 		{
 			case MODE_ID_GEN:
-				staBar[7] = 'G';
-				staBar[8] = 'E';
-				staBar[9] = 'N';
-				staBar[10] = ' ';
+				ole_str.oled_str_sbar[7] = 'G';
+				ole_str.oled_str_sbar[8] = 'E';
+				ole_str.oled_str_sbar[9] = 'N';
+				ole_str.oled_str_sbar[10] = ' ';
 			  break;
 			case MODE_ID_TIMESET:
-				staBar[7] = 'S';
-				staBar[8] = 'E';
-				staBar[9] = 'T';
-				staBar[10] = ' ';				
+				ole_str.oled_str_sbar[7] = 'S';
+				ole_str.oled_str_sbar[8] = 'E';
+				ole_str.oled_str_sbar[9] = 'T';
+				ole_str.oled_str_sbar[10] = ' ';				
 			  break;
 			case MODE_ID_ALMSET:				
-				staBar[7] = 'A';
-				staBar[8] = 'L';
-				staBar[9] = 'M';
-				staBar[10] = ' ';
+				ole_str.oled_str_sbar[7] = 'A';
+				ole_str.oled_str_sbar[8] = 'L';
+				ole_str.oled_str_sbar[9] = 'M';
+				ole_str.oled_str_sbar[10] = ' ';
 			  break;
 			case MODE_ID_CPU:
-				staBar[7] = 'C';
-				staBar[8] = 'P';
-				staBar[9] = 'U';
-				staBar[10] = ' ';
+				ole_str.oled_str_sbar[7] = 'C';
+				ole_str.oled_str_sbar[8] = 'P';
+				ole_str.oled_str_sbar[9] = 'U';
+				ole_str.oled_str_sbar[10] = ' ';
 				break;
 			case MODE_ID_TEMP:
-				staBar[7] = 'T';
-				staBar[8] = 'E';
-				staBar[9] = 'M';
-				staBar[10] = 'P';
+				ole_str.oled_str_sbar[7] = 'T';
+				ole_str.oled_str_sbar[8] = 'E';
+				ole_str.oled_str_sbar[9] = 'M';
+				ole_str.oled_str_sbar[10] = 'P';
 				break;
 			case MODE_ID_GAME:
-			  staBar[7] = 'G';
-				staBar[8] = 'A';
-				staBar[9] = 'M';
-				staBar[10] = 'E';	
+			  ole_str.oled_str_sbar[7] = 'G';
+				ole_str.oled_str_sbar[8] = 'A';
+				ole_str.oled_str_sbar[9] = 'M';
+				ole_str.oled_str_sbar[10] = 'E';	
 			  break;
 			case MODE_ID_LOWP:
-				staBar[7] = 'L';
-				staBar[8] = 'O';
-				staBar[9] = 'W';
-				staBar[10] = 'P';
+				ole_str.oled_str_sbar[7] = 'L';
+				ole_str.oled_str_sbar[8] = 'O';
+				ole_str.oled_str_sbar[9] = 'W';
+				ole_str.oled_str_sbar[10] = 'P';
         break;			
 			case MODE_ID_BTRS:
-			  staBar[7] = 'B';
-				staBar[8] = 'T';
-				staBar[9] = 'R';
-				staBar[10] = 'S';		
+			  ole_str.oled_str_sbar[7] = 'B';
+				ole_str.oled_str_sbar[8] = 'T';
+				ole_str.oled_str_sbar[9] = 'R';
+				ole_str.oled_str_sbar[10] = 'S';		
 			  break;
       case MODE_ID_BTVE:
-			  staBar[7] = 'B';
-				staBar[8] = 'T';
-				staBar[9] = 'V';
-				staBar[10] = 'E';		
+			  ole_str.oled_str_sbar[7] = 'B';
+				ole_str.oled_str_sbar[8] = 'T';
+				ole_str.oled_str_sbar[9] = 'V';
+				ole_str.oled_str_sbar[10] = 'E';		
 			  break;
       case MODE_ID_BTAD:
-			  staBar[7] = 'B';
-				staBar[8] = 'T';
-				staBar[9] = 'A';
-				staBar[10] = 'D';		
+			  ole_str.oled_str_sbar[7] = 'B';
+				ole_str.oled_str_sbar[8] = 'T';
+				ole_str.oled_str_sbar[9] = 'A';
+				ole_str.oled_str_sbar[10] = 'D';		
 			  break;
 		}
 	}
@@ -385,28 +388,28 @@ void Key_UpEvt(void)
 			switch(sysCtrlFlag.tim_SetCnt)
 			{
 				case TIME_SET_ID_HOUR:
-					SetTime[DS_TIME_HOUR]--;
-					if(SetTime[DS_TIME_HOUR]==0xff)SetTime[DS_TIME_HOUR] = 23;
+					ds_set_time.ds_time[DS_TIME_HOUR]--;
+					if(ds_set_time.ds_time[DS_TIME_HOUR]==0xff)ds_set_time.ds_time[DS_TIME_HOUR] = 23;
 					break;
 				case TIME_SET_ID_MIN:
-					SetTime[DS_TIME_MIN]--;
-					if(SetTime[DS_TIME_MIN]==0xff)SetTime[DS_TIME_MIN] = 59;
+					ds_set_time.ds_time[DS_TIME_MIN]--;
+					if(ds_set_time.ds_time[DS_TIME_MIN]==0xff)ds_set_time.ds_time[DS_TIME_MIN] = 59;
 					break;
 				case TIME_SET_ID_SEC:
-					SetTime[DS_TIME_SEC]--;
-					if(SetTime[DS_TIME_SEC]==0xff)SetTime[DS_TIME_SEC] = 59;
+					ds_set_time.ds_time[DS_TIME_SEC]--;
+					if(ds_set_time.ds_time[DS_TIME_SEC]==0xff)ds_set_time.ds_time[DS_TIME_SEC] = 59;
 					break;
 				case TIME_SET_ID_YEAR:
-					SetTime[DS_TIME_YEAR]--;
-					if(SetTime[DS_TIME_YEAR]<DS_YEAR_START)SetTime[DS_TIME_YEAR] = DS_YEAR_START;
+					ds_set_time.Year--;
+					if(ds_set_time.Year<DS_YEAR_START)ds_set_time.Year = DS_YEAR_START;
 					break;
 				case TIME_SET_ID_MON:
-					SetTime[DS_TIME_MON]--;
-					if(SetTime[DS_TIME_MON]<1)SetTime[DS_TIME_MON] = 12;
+					ds_set_time.ds_time[DS_TIME_MON]--;
+					if(ds_set_time.ds_time[DS_TIME_MON]<1)ds_set_time.ds_time[DS_TIME_MON] = 12;
 					break;
 				case TIME_SET_ID_DAY:	
-					SetTime[DS_TIME_DAY]--;
-					if(SetTime[DS_TIME_DAY]<1)SetTime[DS_TIME_DAY] = mon_table[SetTime[DS_TIME_MON]-1];
+					ds_set_time.ds_time[DS_TIME_DAY]--;
+					if(ds_set_time.ds_time[DS_TIME_DAY]<1)ds_set_time.ds_time[DS_TIME_DAY] = mon_table[ds_set_time.ds_time[DS_TIME_MON]-1];
 					break;
 			}			
 		}	
@@ -415,34 +418,34 @@ void Key_UpEvt(void)
 			switch(sysCtrlFlag.tim_SetCnt)
 			{
 				case TIME_SET_ID_HOUR:
-					AlmTime[TIME_SET_ID_HOUR]--;
-					if(AlmTime[TIME_SET_ID_HOUR]==0xff)AlmTime[TIME_SET_ID_HOUR] = 23;
+					ds_alm_time.ds_time[DS_TIME_HOUR]--;
+					if(ds_alm_time.ds_time[DS_TIME_HOUR]==0xff)ds_alm_time.ds_time[DS_TIME_HOUR] = 23;
 					break;
 				case TIME_SET_ID_MIN:
-					AlmTime[DS_TIME_MIN]--;
-					if(AlmTime[DS_TIME_MIN]==0xff)AlmTime[DS_TIME_MIN] = 59;
+					ds_alm_time.ds_time[DS_TIME_MIN]--;
+					if(ds_alm_time.ds_time[DS_TIME_MIN]==0xff)ds_alm_time.ds_time[DS_TIME_MIN] = 59;
 					break;
 				case TIME_SET_ID_SEC:
-					AlmTime[DS_TIME_SEC]--;
-					if(AlmTime[DS_TIME_SEC]==0xff)AlmTime[DS_TIME_SEC] = 59;
+					ds_alm_time.ds_time[DS_TIME_SEC]--;
+					if(ds_alm_time.ds_time[DS_TIME_SEC]==0xff)ds_alm_time.ds_time[DS_TIME_SEC] = 59;
 					break;
 				case TIME_SET_ID_YEAR:
-					AlmTime[DS_TIME_YEAR]--;
-					if(AlmTime[DS_TIME_YEAR]<2000)AlmTime[DS_TIME_YEAR] = 2000;
+					ds_alm_time.Year--;
+					if(ds_alm_time.Year<2000)ds_alm_time.Year = 2000;
 					break;
 				case TIME_SET_ID_MON:
-					AlmTime[DS_TIME_MON]--;
-					if(AlmTime[DS_TIME_MON]<1)AlmTime[DS_TIME_MON] = 12;
+					ds_alm_time.ds_time[DS_TIME_MON]--;
+					if(ds_alm_time.ds_time[DS_TIME_MON]<1)ds_alm_time.ds_time[DS_TIME_MON] = 12;
 					break;
 				case TIME_SET_ID_DAY:	
-					AlmTime[DS_TIME_DAY]--;
-					if(AlmTime[DS_TIME_DAY]<1)AlmTime[DS_TIME_DAY] = mon_table[AlmTime[DS_TIME_MON]-1];
+					ds_alm_time.ds_time[DS_TIME_DAY]--;
+					if(ds_alm_time.ds_time[DS_TIME_DAY]<1)ds_alm_time.ds_time[DS_TIME_DAY] = mon_table[ds_alm_time.ds_time[DS_TIME_MON]-1];
 					break;
 			}
 		}
 		else if(SysParam.SysMode == MODE_GAME)
 		{
-			Key_Down_Move(1);  //Up-1
+			key_game_cbk(1);  //Up-1
 		}
 		else{
 			;
@@ -473,7 +476,7 @@ void Key_LeftEvt(void)
 	}
 	else if(SysParam.SysMode == MODE_GAME)
 	{
-		Key_Down_Move(3);  //Left-3
+		key_game_cbk(3);  //Left-3
 	}
 	else{;}
 }
@@ -494,51 +497,58 @@ void Key_RightEvt(void)
 		sysCtrlFlag.tim_SetCnt = TIME_SET_ID_HOUR;
 		if(SysParam.SysMode==MODE_TIMESET)
 		{
-		  ArrayCopy(DS1302_time,SetTime,8,0);
-			staBar[5] = 'M';
+			ds_set_time.Year = DS1302_time[DS_TIME_YEAR]+2000;
+			memcpy(ds_set_time.ds_time,DS1302_time,sizeof(ds_set_time.ds_time));
+			ole_str.oled_str_sbar[5] = 'M';
 		}
 		else if(SysParam.SysMode==MODE_ALARM)
 		{
-		  ArrayCopy(DS1302_time,AlmTime,8,0);
-			staBar[5] = 'M';
+		  ds_alm_time.Year = DS1302_time[DS_TIME_YEAR]+2000;
+			memcpy(ds_alm_time.ds_time,DS1302_time,sizeof(ds_alm_time.ds_time));
+			ole_str.oled_str_sbar[5] = 'M';
 		}
-		else if(SysParam.SysMode==MODE_NORMALLY)staBar[5] = 'M';
-		else if(SysParam.SysMode==MODE_CPU_DATA)staBar[5] = 'M';
-		else if(SysParam.SysMode==MODE_TEMP)staBar[5] = 'M';
+		else if(SysParam.SysMode==MODE_NORMALLY)ole_str.oled_str_sbar[5] = 'M';
+		else if(SysParam.SysMode==MODE_CPU_DATA)ole_str.oled_str_sbar[5] = 'M';
+		else if(SysParam.SysMode==MODE_TEMP)ole_str.oled_str_sbar[5] = 'M';
 		else if(SysParam.SysMode==MODE_GAME)
 		{			
 			GPIO_LED_Disable();
-			staBar[5] = 'M';	
+			ole_str.oled_str_sbar[5] = 'M';	
 			Sanke_Init();
 		}
 		else if(SysParam.SysMode==MODE_LOWP)  //低功耗模式
-		{
-			staBar[5] = 'M';
+		{			
 			PWR_Sleep_Mode(0);
+			ole_str.oled_str_sbar[5] = 'M';
 		}
 		else if(SysParam.SysMode==MODE_BTRS)HC_Reset();//蓝牙重启
 		else if(SysParam.SysMode==MODE_BTVE)
 		{
-			staBar[5] = 'M';
+			ole_str.oled_str_sbar[5] = 'M';
 			HC_AT_Command(AT_COMMAND_VERSION);//蓝牙版本显示
 		}
 		else if(SysParam.SysMode==MODE_BTAD)
 		{
-			staBar[5] = 'M';
+			ole_str.oled_str_sbar[5] = 'M';
 			HC_AT_Command(AT_COMMAND_ADDR);//蓝牙地址显示
 		}
 		else{;}
 	}
 	else
 	{
-		if(SysParam.SysMode == MODE_TIMESET || SysParam.SysMode == MODE_ALARM)
+		if(SysParam.SysMode == MODE_TIMESET)
 		{
 			sysCtrlFlag.tim_SetCnt++;
-			if(sysCtrlFlag.tim_SetCnt>TIME_SET_ID_YEAR)sysCtrlFlag.tim_SetCnt = TIME_SET_ID_HOUR;
+			if(sysCtrlFlag.tim_SetCnt>TIME_SET_ID_DAY)sysCtrlFlag.tim_SetCnt = TIME_SET_ID_HOUR;
+		}
+		else if(SysParam.SysMode == MODE_ALARM)
+		{
+			sysCtrlFlag.tim_SetCnt++;
+			if(sysCtrlFlag.tim_SetCnt>TIME_SET_ID_SEC)sysCtrlFlag.tim_SetCnt = TIME_SET_ID_HOUR;
 		}
 		else if(SysParam.SysMode == MODE_GAME)
 		{
-			Key_Down_Move(4);  //right-4
+			key_game_cbk(4);  //right-4
 		}
 		else{;}
 	}
@@ -560,17 +570,18 @@ void Key_EnterEvt(void)
 		{
 			sw_flag.sel_Fg = 1;
 			sw_flag.mode_Fg = 1;
-			staBar[5] = 'S';
+			ole_str.oled_str_sbar[5] = 'S';
 			SysParam.SysMode = MODE_SECLECT;
+			sysCtrlFlag.pwFlag = 0;
 		}
 		else if(SysParam.SysMode == MODE_TIMESET)
 		{
-			temp = SetTime[DS_TIME_YEAR];
+			temp = (ds_set_time.Year-2000)&0xff;
 			DS1302_SetTime((((temp/10)<<4)|(temp%10)),
-			(((SetTime[DS_TIME_MON]/10))<<4|(SetTime[DS_TIME_MON]%10)),
-			(((SetTime[DS_TIME_DAY]/10))<<4|(SetTime[DS_TIME_DAY]%10)),
-			(((SetTime[DS_TIME_HOUR]/10))<<4|(SetTime[DS_TIME_HOUR]%10)),
-			(((SetTime[DS_TIME_MIN]/10))<<4|(SetTime[DS_TIME_MIN]%10)),
+			(((ds_set_time.ds_time[DS_TIME_MON]/10))<<4|(ds_set_time.ds_time[DS_TIME_MON]%10)),
+			(((ds_set_time.ds_time[DS_TIME_DAY]/10))<<4|(ds_set_time.ds_time[DS_TIME_DAY]%10)),
+			(((ds_set_time.ds_time[DS_TIME_HOUR]/10))<<4|(ds_set_time.ds_time[DS_TIME_HOUR]%10)),
+			(((ds_set_time.ds_time[DS_TIME_MIN]/10))<<4|(ds_set_time.ds_time[DS_TIME_MIN]%10)),
 			0,0);
 			
 			sysCtrlFlag.beepFlag = 200;
@@ -601,51 +612,57 @@ void Key_EnterEvt(void)
 // *****************************************************************************
 void Key_CacelEvt(void)
 {
-	
+	U8 temp[8]={0};
 	if(sw_flag.sel_Fg==1)
 	{
 		SysParam.SysMode = MODE_NORMALLY;
 		sw_flag.sel_Fg = 0;
-		staBar[5] = 'M';
+		ole_str.oled_str_sbar[5] = 'M';
 	}
 	else
 	{
 		if(SysParam.SysMode != MODE_NORMALLY)
-		{
+		{			
 			if(SysParam.SysMode==MODE_GAME)
 			{
 				Dispose_Game();
 				GPIO_LED_Enable();
+				//OLED_Clear();
 			}
 			else if(SysParam.SysMode==MODE_LOWP)
 			{
 				PWR_Sleep_Mode(1);			
 			}
-			else{;}
-			OLED_Clear();
+			else if(SysParam.SysMode == MODE_ALARM)
+			{
+				AT24C02_Read(ALM_EEPADDR,temp,8);
+	      ArrayCopy(temp,SysParam.SysALMTime,8,0);
+			}
+			else{;}	
+      
 			SysParam.SysMode = MODE_NORMALLY;
-			timeStr[0] = ' ';
-			timeStr[1] = ' ';
-			timeStr[2] = ' ';
-			timeStr[3] = ' ';
-			timeStr[12] = ' ';
-			timeStr[13] = ' ';
-			timeStr[14] = ' ';
-			timeStr[15] = ' ';
-			dailyStr[0] = ' ';
-			dailyStr[1] = ' ';
-			dailyStr[2] = ' ';
-			dailyStr[13] = ' ';
-			dailyStr[14] = ' ';
-			dailyStr[15] = ' ';
-		  sysCtrlFlag.pwFlag = 1;
+			sysCtrlFlag.pwFlag = 0;				
+			ole_str.oled_str_time[0] = ' ';
+			ole_str.oled_str_time[1] = ' ';
+			ole_str.oled_str_time[2] = ' ';
+			ole_str.oled_str_time[3] = ' ';
+			ole_str.oled_str_time[12] = ' ';
+			ole_str.oled_str_time[13] = ' ';
+			ole_str.oled_str_time[14] = ' ';
+			ole_str.oled_str_time[15] = ' ';
+			ole_str.oled_str_daily[0] = ' ';
+			ole_str.oled_str_daily[1] = ' ';
+			ole_str.oled_str_daily[2] = ' ';
+			ole_str.oled_str_daily[13] = ' ';
+			ole_str.oled_str_daily[14] = ' ';
+			ole_str.oled_str_daily[15] = ' ';		  
 		}
 		else
 		{
 			//关闭屏幕			
-			if(dis_cnt%2==0) OLED_Display_Off();			
+			if(sysCtrlFlag.screenFlag%2==0) OLED_Display_Off();			
 			else             OLED_Display_On();
-			dis_cnt++;
+			sysCtrlFlag.screenFlag++;
 			
 		}
 	}
@@ -678,8 +695,12 @@ void ArrayCopy(U8 *source_buf,U8 *des_buf,U16 len,U16 start)
 // *****************************************************************************
 void Save_ALMTime(void)
 {
+	U8 temp[8] = {0};
 	//保存闹钟时间
-	AT24C02_Write(ALM_EEPADDR,AlmTime,8);
+	ds_alm_time.ds_time[DS_TIME_YEAR] = (ds_alm_time.Year-2000)&0xff;
+	AT24C02_Write(ALM_EEPADDR,ds_alm_time.ds_time,8);
+	AT24C02_Read(ALM_EEPADDR,temp,8);
+	ArrayCopy(temp,SysParam.SysALMTime,8,0);
 }
 
 // *****************************************************************************
@@ -690,12 +711,13 @@ void Save_ALMTime(void)
 // 返回参量: /
 // *****************************************************************************
 void ALM_Proc(void)
-{
-	
+{	
 	static U8 temp_sw_fg = 0;
 	if(SysParam.SysMode==MODE_NORMALLY)
 	{
-		if(DS1302_time[DS_TIME_HOUR]==AlmTime[DS_TIME_HOUR] && DS1302_time[DS_TIME_MIN]==AlmTime[DS_TIME_MIN] && DS1302_time[DS_TIME_SEC]<=20)
+		if(DS1302_time[DS_TIME_HOUR]==SysParam.SysALMTime[DS_TIME_HOUR] 
+		&& DS1302_time[DS_TIME_MIN]==SysParam.SysALMTime[DS_TIME_MIN] 
+		&& DS1302_time[DS_TIME_SEC]<=20)
 		{
 			sysCtrlFlag.beepFlag = 255;
 			sysCtrlFlag.usb_SwFg = USB_SW_OFF;
@@ -721,14 +743,14 @@ void SetPowerSta(U8 flag)
 	if(flag%2==0)
 	{
 			POWER_OFF;
-		  staBar[2]='0';
-			staBar[3]='0';
+		  ole_str.oled_str_sbar[2]='0';
+			ole_str.oled_str_sbar[3]='0';
 	}
 	else
 	{
 			POWER_ON;		
-		  staBar[2]='0';
-			staBar[3]='1';
+		  ole_str.oled_str_sbar[2]='0';
+			ole_str.oled_str_sbar[3]='1';
 	}
 }
 
@@ -782,7 +804,7 @@ void PWR_Sleep_Mode(U8 mcu_status)
 		GPIO_LED_Disable();
 		OLED_Display_Off();   //关闭屏幕		
 		SetPowerSta(0);
-		dis_cnt = 1;
+		sysCtrlFlag.screenFlag = 1;
  
 //	  RCC_APB1PeriphClockCmd(RCC_APB1Periph_PWR , ENABLE);//开电源管理时钟
 //	  PWR_EnterSTOPMode(PWR_Regulator_ON, PWR_STOPEntry_WFI);//进入停机模式		
@@ -809,7 +831,7 @@ void PWR_Sleep_Mode(U8 mcu_status)
 		OLED_Display_On();
 		
 		GPIO_LED_Enable();
-		dis_cnt = 0;
+		sysCtrlFlag.screenFlag = 0;
 		sw_flag.sel_Fg = 0;	
 	}
 }
